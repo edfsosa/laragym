@@ -1,5 +1,14 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\RoutineController;
+use App\Livewire\Equipments;
+use App\Livewire\ExerciseCatalog;
+use App\Livewire\MemberMemberships;
+use App\Livewire\MemberProgress;
+use App\Livewire\MemberTrainers;
+use App\Livewire\UserRoutines;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -7,10 +16,6 @@ use Livewire\Volt\Volt;
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
-
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
@@ -29,6 +34,16 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/routines', UserRoutines::class)->name('routines.index');
+    Route::get('/exercises', ExerciseCatalog::class)->name('exercises.catalog');
+    Route::get('/memberships', MemberMemberships::class)->name('memberships.index');
+    Route::get('/trainers', MemberTrainers::class)->name('trainers.index');
+    Route::get('/progress', MemberProgress::class)->name('progress.index');
+    Route::get('/equipments', Equipments::class)->name('equipments.index');
+
+    Route::get('/receipts/{reference}/download', [ReceiptController::class, 'download'])->name('receipts.download');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
