@@ -4,10 +4,11 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class ExerciseCatalog extends Component
+class ExercisesCatalog extends Component
 {
     public $selectedExercise = null;
     public $showModal = false;
+    public $filterGroup = null;
 
     public function viewDetails($name)
     {
@@ -26,18 +27,21 @@ class ExerciseCatalog extends Component
     {
         return collect([
             (object) [
+                'id' => 1,
                 'name' => 'Push-ups',
                 'description' => 'Lower your body to the floor and push back up using your arms.',
                 'image' => 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2RxcWplZXhyZW1tbHlmZzN0YXU1bTVrN283bWYybGlma29sMmUzciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ohze1qkqPZHMrEuwo/giphy.gif',
                 'muscle_group' => 'Chest, Triceps',
             ],
             (object) [
+                'id' => 2,
                 'name' => 'Squats',
                 'description' => 'Bend your knees and lower your body as if sitting.',
                 'image' => 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExanpqa3k2NmEwNnBlNzRiNTdmbnhlOGxnaTcyOWdxa2Q1c3FkMGgxciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Y1YTIsIcxgfMk/giphy.gif',
                 'muscle_group' => 'Legs, Glutes',
             ],
             (object) [
+                'id' => 3,
                 'name' => 'Plank',
                 'description' => 'Hold a push-up position, keeping your body straight.',
                 'image' => 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHNtMzFiMmx6anc2bW85amIwMHQxYzNpYmhwcHI3bmlsNnY4ZWxlYSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3PywN1RF3eLyVTgzTw/giphy.gif',
@@ -50,6 +54,12 @@ class ExerciseCatalog extends Component
     {
         $exercises = $this->getAllExercises();
 
-        return view('livewire.exercise-catalog', compact('exercises'));
+        if ($this->filterGroup) {
+            $exercises = $exercises->filter(function ($exercise) {
+                return stripos($exercise->muscle_group, $this->filterGroup) !== false;
+            });
+        }
+
+        return view('livewire.exercises-catalog', compact('exercises'));
     }
 }

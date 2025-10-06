@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class UserRoutines extends Component
+class Routines extends Component
 {
     public $selectedRoutine = null;
     public $showModal = false;
@@ -23,7 +23,12 @@ class UserRoutines extends Component
                 'exercises' => [
                     ['name' => 'Push-ups', 'sets' => 3, 'reps' => 15],
                     ['name' => 'Squats', 'sets' => 3, 'reps' => 20],
+                    ['name' => 'Lunges', 'sets' => 3, 'reps' => 10],
                     ['name' => 'Plank', 'sets' => 3, 'reps' => '30 sec'],
+                    ['name' => 'Jumping Jacks', 'sets' => 3, 'reps' => 25],
+                    ['name' => 'Mountain Climbers', 'sets' => 3, 'reps' => 20],
+                    ['name' => 'Sit-ups', 'sets' => 3, 'reps' => 15],
+                    ['name' => 'Bicycle Crunches', 'sets' => 3, 'reps' => 20]
                 ],
             ],
             (object) [
@@ -92,6 +97,9 @@ class UserRoutines extends Component
             ],
         ]);
 
-        return view('livewire.user-routines', compact('routines'));
+        $activeRoutines = $routines->whereIn('status', ['active', 'paused']);
+        $completedRoutines = $routines->where('status', 'completed');
+
+        return view('livewire.routines', compact('activeRoutines', 'completedRoutines'));
     }
 }

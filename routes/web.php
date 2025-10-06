@@ -2,13 +2,11 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReceiptController;
-use App\Http\Controllers\RoutineController;
 use App\Livewire\Equipments;
-use App\Livewire\ExerciseCatalog;
-use App\Livewire\MemberMemberships;
-use App\Livewire\MemberProgress;
-use App\Livewire\MemberTrainers;
-use App\Livewire\UserRoutines;
+use App\Livewire\ExercisesCatalog;
+use App\Livewire\Memberships;
+use App\Livewire\Trainers;
+use App\Livewire\Routines;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
@@ -36,11 +34,10 @@ Route::middleware(['auth'])->group(function () {
         ->name('two-factor.show');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/routines', UserRoutines::class)->name('routines.index');
-    Route::get('/exercises', ExerciseCatalog::class)->name('exercises.catalog');
-    Route::get('/memberships', MemberMemberships::class)->name('memberships.index');
-    Route::get('/trainers', MemberTrainers::class)->name('trainers.index');
-    Route::get('/progress', MemberProgress::class)->name('progress.index');
+    Route::get('/routines', Routines::class)->name('routines.index');
+    Route::get('/exercises-catalog', ExercisesCatalog::class)->name('exercises.catalog');
+    Route::get('/memberships', Memberships::class)->name('memberships.index');
+    Route::get('/trainers', Trainers::class)->name('trainers.index');
     Route::get('/equipments', Equipments::class)->name('equipments.index');
 
     Route::get('/receipts/{reference}/download', [ReceiptController::class, 'download'])->name('receipts.download');

@@ -18,7 +18,8 @@
                 <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')"
                     wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                 <flux:navlist.item icon="clipboard-document-list" :href="route('routines.index')"
-                    :current="request()->routeIs('routines.index')" wire:navigate>{{ __('My Routines') }}
+                    :current="request()->routeIs('routines.index')" wire:navigate>
+                    {{ __('Routines') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="play-circle" :href="route('exercises.catalog')"
                     :current="request()->routeIs('exercises.catalog')" wire:navigate>
@@ -26,15 +27,11 @@
                 </flux:navlist.item>
                 <flux:navlist.item icon="credit-card" :href="route('memberships.index')"
                     :current="request()->routeIs('memberships.index')" wire:navigate>
-                    {{ __('My Memberships') }}
+                    {{ __('Memberships') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="user-group" :href="route('trainers.index')"
                     :current="request()->routeIs('trainers.index')" wire:navigate>
-                    {{ __('My Trainers') }}
-                </flux:navlist.item>
-                <flux:navlist.item icon="chart-bar" :href="route('progress.index')"
-                    :current="request()->routeIs('progress.index')" wire:navigate>
-                    {{ __('Progress') }}
+                    {{ __('Trainers') }}
                 </flux:navlist.item>
                 <flux:navlist.item icon="rectangle-stack" :href="route('equipments.index')"
                     :current="request()->routeIs('equipments.index')" wire:navigate>
@@ -140,6 +137,7 @@
     {{ $slot }}
 
     @fluxScripts
+    @stack('scripts')
 </body>
 
 </html>

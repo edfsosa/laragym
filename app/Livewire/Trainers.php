@@ -3,26 +3,37 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Collection;
 
-class MemberTrainers extends Component
+class Trainers extends Component
 {
-    public $showModal = false;
-    public $selectedTrainer = null;
+    public bool $showModal = false;
+    public ?object $selectedTrainer = null;
 
-    public function viewTrainer($id)
+    /**
+     * Mostrar los detalles del entrenador seleccionado
+     */
+    public function viewTrainer(int $id): void
     {
-        $trainers = $this->getMockedTrainers();
-        $this->selectedTrainer = $trainers->firstWhere('id', $id);
-        $this->showModal = true;
+        $this->selectedTrainer = $this->getMockedTrainers()
+            ->firstWhere('id', $id);
+
+        $this->showModal = (bool) $this->selectedTrainer;
     }
 
-    public function closeModal()
+    /**
+     * Cerrar el modal
+     */
+    public function closeModal(): void
     {
-        $this->showModal = false;
         $this->selectedTrainer = null;
+        $this->showModal = false;
     }
 
-    private function getMockedTrainers()
+    /**
+     * Obtener entrenadores (simulados por ahora)
+     */
+    private function getMockedTrainers(): Collection
     {
         return collect([
             (object) [
@@ -32,7 +43,7 @@ class MemberTrainers extends Component
                 'rating' => 4.8,
                 'photo' => 'https://randomuser.me/api/portraits/men/11.jpg',
                 'bio' => 'Apasionado del fitness con más de 10 años de experiencia en entrenamiento funcional, fuerza y movilidad.',
-                'routines' => ['Power Start', 'Full Body Burn', 'Cardio Blast'],
+                'routines' => ['Full Body Funcional', 'Movilidad Articular'],
             ],
             (object) [
                 'id' => 2,
@@ -41,7 +52,7 @@ class MemberTrainers extends Component
                 'rating' => 4.9,
                 'photo' => 'https://randomuser.me/api/portraits/women/32.jpg',
                 'bio' => 'Instructora certificada en Yoga y Pilates. Promueve el equilibrio entre mente y cuerpo mediante rutinas adaptadas.',
-                'routines' => ['Morning Flow', 'Zen Stretch', 'Mindful Balance'],
+                'routines' => ['Yoga Matutino', 'Stretch Flow', 'Respiración y Mindfulness'],
             ],
             (object) [
                 'id' => 3,
@@ -50,14 +61,18 @@ class MemberTrainers extends Component
                 'rating' => 4.7,
                 'photo' => 'https://randomuser.me/api/portraits/men/21.jpg',
                 'bio' => 'Entrenador personal especializado en musculación y fuerza. Ha ayudado a más de 200 clientes a lograr sus metas físicas.',
-                'routines' => ['Muscle Max', 'Core Builder', 'Strength 360'],
+                'routines' => ['Hipertrofia Avanzada', 'Push Pull Legs', 'Split 5 Días'],
             ],
         ]);
     }
 
+    /**
+     * Renderizar la vista del componente
+     */
     public function render()
     {
-        $trainers = $this->getMockedTrainers();
-        return view('livewire.member-trainers', compact('trainers'));
+        return view('livewire.trainers', [
+            'trainers' => $this->getMockedTrainers(),
+        ]);
     }
 }

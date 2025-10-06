@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class MemberMemberships extends Component
+class Memberships extends Component
 {
     public $showReceiptModal = false;
     public $selectedReceipt = null;
@@ -26,6 +26,7 @@ class MemberMemberships extends Component
     {
         return [
             (object) [
+                'id' => 1,
                 'date' => '15/01/2025',
                 'amount' => 'Gs. 150,000',
                 'method' => 'Transferencia',
@@ -33,11 +34,28 @@ class MemberMemberships extends Component
                 'reference' => 'TXN123456',
             ],
             (object) [
+                'id' => 2,
                 'date' => '15/02/2025',
                 'amount' => 'Gs. 150,000',
                 'method' => 'Efectivo',
-                'status' => 'pending',
+                'status' => 'paid',
                 'reference' => 'TXN789012',
+            ],
+            (object) [
+                'id' => 3,
+                'date' => '15/03/2025',
+                'amount' => 'Gs. 150,000',
+                'method' => 'Tarjeta de Crédito',
+                'status' => 'paid',
+                'reference' => 'TXN345678',
+            ],
+            (object) [
+                'id' => 4,
+                'date' => '15/04/2025',
+                'amount' => 'Gs. 150,000',
+                'method' => 'Transferencia',
+                'status' => 'paid',
+                'reference' => 'TXN901234',
             ],
         ];
     }
@@ -61,10 +79,10 @@ class MemberMemberships extends Component
             ],
         ]);
 
-        return view('livewire.member-memberships', [
-            'memberships' => $memberships,
-            'payments' => collect($this->getPayments()),
-        ]);
-        
+        $active = $memberships->firstWhere('status', 'active');
+        $history = $memberships->reject(fn($m) => $m->status === 'active');
+        $payments = collect($this->getPayments());
+
+        return view('livewire.memberships', compact('memberships', 'active', 'history', 'payments'));
     }
 }
