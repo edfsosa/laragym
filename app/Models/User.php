@@ -69,4 +69,59 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(UserMembership::class);
     }
+
+    public function getPersonalDataAvatarUrl(): ?string
+    {
+        return $this->personalData->avatar ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
+    }
+
+    public function getDocumentNumberAttribute(): ?string
+    {
+        return $this->personalData ? $this->personalData->document_number : null;
+    }
+
+    public function getGenderAttribute(): ?string
+    {
+        return $this->personalData ? $this->personalData->gender : null;
+    }
+
+    public function getBirthDateAttribute(): ?string // dd/mm/yyyy
+    {
+        return $this->personalData && $this->personalData->birth_date ? $this->personalData->birth_date->format('d/m/Y') : null;
+    }
+
+    public function getPhoneAttribute(): ?string
+    {
+        return $this->personalData ? $this->personalData->phone : null;
+    }
+
+    public function getCityAttribute(): ?string
+    {
+        return $this->address ? $this->address->city->name : null;
+    }
+
+    public function getStreetAttribute(): ?string
+    {
+        return $this->address ? $this->address->street : null;
+    }
+
+    public function getNumberAttribute(): ?string
+    {
+        return $this->address ? $this->address->number : null;
+    }
+
+    public function getReferenceAttribute(): ?string
+    {
+        return $this->address ? $this->address->reference : null;
+    }
+
+    public function getFullAddressAttribute(): ?string
+    {
+        if (!$this->address && !$this->address->city) {
+            return null;
+        }
+        else {
+            return "{$this->address->street} N° {$this->address->number}, {$this->address->city->name}";
+        }
+    }
 }

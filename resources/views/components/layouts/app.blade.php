@@ -47,10 +47,11 @@
                 @endif
 
                 <x-menu-item title="Dashboard" icon="o-home" link="{{ route('dashboard') }}" />
+                <x-menu-item title="Memberships" icon="o-identification" link="{{ route('memberships.index') }}" />
                 
                 <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
+                    <x-menu-item title="Theme" icon="o-swatch" @click="$dispatch('mary-toggle-theme')" />
+                    <x-menu-item title="Profile" icon="o-user-circle" link="{{ route('profile') }}" />
                 </x-menu-sub>
             </x-menu>
         </x-slot:sidebar>
@@ -63,5 +64,8 @@
 
     {{--  TOAST area --}}
     <x-toast />
+
+    {{-- THEME TOGGLE --}}
+    <x-theme-toggle class="hidden" />
 </body>
 </html>

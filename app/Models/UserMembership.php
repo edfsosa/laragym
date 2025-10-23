@@ -28,4 +28,24 @@ class UserMembership extends Model
     {
         return $this->belongsTo(Membership::class);
     }
+
+    public function getUserNameAttribute()
+    {
+        return $this->user ? $this->user->name : null;
+    }
+
+    public function getMembershipNameAttribute()
+    {
+        return $this->membership ? $this->membership->name : null;
+    }
+
+    public function getMembershipDescriptionAttribute()
+    {
+        return $this->membership ? $this->membership->description : null;
+    }
+
+    public function getMembershipPriceAttribute() // en formato guaranies paraguayos
+    {
+        return $this->membership ? number_format($this->membership->price, 0, ',', '.') . ' Gs.' : null;
+    }
 }
