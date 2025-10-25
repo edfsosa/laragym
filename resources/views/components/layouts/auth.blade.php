@@ -13,6 +13,9 @@
 <body class="min-h-screen font-sans antialiased bg-base-200">
     <div class="w-full min-h-screen flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
+            <h1 class="text-center text-3xl font-extrabold">
+                {{ __('Log in to your account') }}
+            </h1>
             {{ $slot }}
         </div>
     </div>

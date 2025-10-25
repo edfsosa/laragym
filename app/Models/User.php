@@ -70,9 +70,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(UserMembership::class);
     }
 
-    public function getPersonalDataAvatarUrl(): ?string
+    public function getAvatarUrlAttribute(): string
     {
-        return $this->personalData->avatar ?? "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
+        return $this->personalData ? $this->personalData->avatar : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
     }
 
     public function getDocumentNumberAttribute(): ?string
@@ -119,8 +119,7 @@ class User extends Authenticatable implements FilamentUser
     {
         if (!$this->address && !$this->address->city) {
             return null;
-        }
-        else {
+        } else {
             return "{$this->address->street} N° {$this->address->number}, {$this->address->city->name}";
         }
     }

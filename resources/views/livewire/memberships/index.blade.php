@@ -11,7 +11,9 @@ new #[Title('Memberships')] class extends Component {
 
     public function memberships(): Collection
     {
-        return UserMembership::all();
+        return UserMembership::query()
+            ->where('user_id', auth()->id())
+            ->get();
     }
 
     public function with(): array
@@ -36,31 +38,24 @@ new #[Title('Memberships')] class extends Component {
                 'label' => 'Memberships',
                 'link' => '/memberships',
             ],
-            [
-                'label' => 'List',
-            ],
         ];
     @endphp
-
+    <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
     <!-- LIST ITEM -->
-    <x-card shadow>
-        @forelse ($memberships as $membership)
+    @forelse ($memberships as $membership)
+        <x-card shadow>
             <x-list-item :item="$membership" value="membership_name" sub-value="membership_description"
                 link="{{ route('memberships.show', $membership) }}">
                 <x-slot:avatar>
-                    <x-badge value="{{ $membership->status }}" class="badge-primary badge-soft" />
+                    <x-badge value="{{ $membership->status }}" class="badge-primary" />
                 </x-slot:avatar>
             </x-list-item>
-        @empty
-            {{-- NO RESULTS --}}
-            <x-alert title="Nothing here!" description="Try to remove some filters." icon="o-exclamation-triangle"
-                class="bg-base-100 border-none">
-                <x-slot:actions>
-                    <x-button label="Clear filters" wire:click="clear" icon="o-x-mark" spinner />
-                </x-slot:actions>
-            </x-alert>
-        @endforelse
-    </x-card>
+        </x-card>
+    @empty
+        <x-alert title="No memberships found"
+            description="You do not have any memberships at the moment. Please check back later or contact support for more information."
+            icon="o-exclamation-triangle" />
+    @endforelse
 </div>

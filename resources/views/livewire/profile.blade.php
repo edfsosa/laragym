@@ -23,7 +23,7 @@ new #[Title('Profile')] class extends Component {
 
     <!-- PROFILE DETAILS -->
 
-    <x-avatar :image="$user->personalData->avatar" class="w-22">
+    <x-avatar :image="@asset('storage/' . $user->avatar_url)" class="w-22">
         <x-slot:title class="text-3xl font-bold pl-2">
             {{ $user->name }}
         </x-slot:title>

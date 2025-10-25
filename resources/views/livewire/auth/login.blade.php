@@ -13,8 +13,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
-new #[Layout('components.layouts.auth')] 
-class extends Component {
+new #[Layout('components.layouts.auth')] class extends Component {
     #[Validate('required|string|email')]
     public string $email = '';
 
@@ -93,15 +92,13 @@ class extends Component {
 <div>
     <x-form method="POST" wire:submit="login">
         <!-- Email Address -->
-        <x-input label="{{ __('Email address') }}" wire:model="email" type="email" icon="o-envelope"
-            placeholder="email@example.com" />
+        <x-input label="{{ __('Email address') }}" wire:model="email" type="email" icon="o-envelope" />
 
         <!-- Password -->
-        <x-password label="{{ __('Password') }}" wire:model="password" icon="o-key"
-            placeholder="{{ __('Your password') }}" right />
+        <x-password label="{{ __('Password') }}" wire:model="password" icon="o-key" right />
 
         <x-slot:actions>
-            <x-button label="{{ __('Log in') }}" type="submit" class="w-full btn-primary" />
+            <x-button label="{{ __('Log in') }}" type="submit" class="w-full btn-primary" spinner="login" />
         </x-slot:actions>
     </x-form>
 </div>
