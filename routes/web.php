@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [App\Http\Controllers\LandingPageController::class, '__invoke'])->name('landing');
 
 Route::middleware(['auth'])->group(function () {
     Volt::route('/users', 'users.index')->name('users.index');

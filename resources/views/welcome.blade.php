@@ -234,47 +234,15 @@
             </div>
             <!-- Features Grid -->
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">🏋️</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Área de Pesas</h3>
-                    <p class="text-gray-400">Mancuernas, barras olímpicas y máquinas de última generación. Todo lo que
-                        necesitas para construir músculo.</p>
-                </div>
-
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">🏃</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Zona Cardio</h3>
-                    <p class="text-gray-400">Caminadoras, elípticas y bicicletas con pantallas táctiles y conectividad.
-                        Entrena mientras disfrutas tu contenido favorito.</p>
-                </div>
-
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">🥊</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Área Funcional</h3>
-                    <p class="text-gray-400">Espacio dedicado para CrossFit, entrenamiento funcional y clases grupales
-                        con equipamiento especializado.</p>
-                </div>
-
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">🧘</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Salón de Yoga</h3>
-                    <p class="text-gray-400">Espacio tranquilo y equipado para yoga, pilates y meditación. Encuentra tu
-                        balance interior.</p>
-                </div>
-
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">🚿</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Vestidores Premium</h3>
-                    <p class="text-gray-400">Duchas modernas, lockers seguros y áreas de cambio amplias. Comodidad total
-                        antes y después de entrenar.</p>
-                </div>
-
-                <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
-                    <div class="text-6xl mb-4">❄️</div>
-                    <h3 class="text-2xl font-black text-white mb-3">Climatización</h3>
-                    <p class="text-gray-400">Aire acondicionado en todas las áreas. Entrena cómodo sin importar el
-                        clima exterior.</p>
-                </div>
+                @forelse ($facilities as $facility)
+                    <div class="feature-card bg-linear-to-br from-gray-900 to-black rounded-xl p-8">
+                        {{-- <div class="text-6xl mb-4">🏋️</div> --}}
+                        <h3 class="text-2xl font-black text-white mb-3">{{ $facility->name }}</h3>
+                        <p class="text-gray-400">{{ $facility->summary }}</p>
+                    </div>
+                @empty
+                    <p class="text-gray-400">No hay instalaciones disponibles en este momento.</p>
+                @endforelse
             </div>
         </div>
     </section>
@@ -286,53 +254,23 @@
                 <!-- Services -->
                 <div>
                     <!-- Section Header -->
-                    <h2 class="text-5xl font-black text-white mb-8">Entrenadores <span
-                            class="gym-purple">Profesionales</span></h2>
+                    <h2 class="text-5xl font-black text-white mb-8">Servicios <span class="gym-purple">Destacados</span>
+                    </h2>
                     <!-- Services List -->
                     <div class="space-y-6">
-                        <div class="flex items-start group">
-                            <div
-                                class="shrink-0 w-14 h-14 purple-gradient rounded-xl flex items-center justify-center text-white text-2xl font-black group-hover:scale-110 transition">
-                                👤</div>
-                            <div class="ml-5">
-                                <h3 class="text-2xl font-black text-white mb-2">Entrenamiento Personalizado</h3>
-                                <p class="text-gray-400">Planes 100% adaptados a tus objetivos con seguimiento
-                                    constante. Tu entrenador personal te guía en cada paso.</p>
+                        @forelse ($services as $service)
+                            <div class="flex items-start group">
+                                <div
+                                    class="shrink-0 w-14 h-14 purple-gradient rounded-xl flex items-center justify-center text-white text-2xl font-black group-hover:scale-110 transition">
+                                    👤</div>
+                                <div class="ml-5">
+                                    <h3 class="text-2xl font-black text-white mb-2">{{ $service->name }}</h3>
+                                    <p class="text-gray-400">{{ $service->summary }}</p>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="flex items-start group">
-                            <div
-                                class="shrink-0 w-14 h-14 purple-gradient rounded-xl flex items-center justify-center text-white text-2xl font-black group-hover:scale-110 transition">
-                                📋</div>
-                            <div class="ml-5">
-                                <h3 class="text-2xl font-black text-white mb-2">Evaluación Inicial</h3>
-                                <p class="text-gray-400">Análisis completo de composición corporal y capacidades
-                                    físicas. Establecemos tu punto de partida y metas realistas.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start group">
-                            <div
-                                class="shrink-0 w-14 h-14 purple-gradient rounded-xl flex items-center justify-center text-white text-2xl font-black group-hover:scale-110 transition">
-                                🥗</div>
-                            <div class="ml-5">
-                                <h3 class="text-2xl font-black text-white mb-2">Asesoría Nutricional</h3>
-                                <p class="text-gray-400">Planes alimenticios personalizados según tus objetivos. El 70%
-                                    de los resultados está en la nutrición.</p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start group">
-                            <div
-                                class="shrink-0 w-14 h-14 purple-gradient rounded-xl flex items-center justify-center text-white text-2xl font-black group-hover:scale-110 transition">
-                                👥</div>
-                            <div class="ml-5">
-                                <h3 class="text-2xl font-black text-white mb-2">Clases Grupales</h3>
-                                <p class="text-gray-400">Spinning, CrossFit, Yoga, Zumba y más. Entrenamientos
-                                    divertidos en grupo con instructores certificados.</p>
-                            </div>
-                        </div>
+                        @empty
+                            <p class="text-gray-400">No hay servicios disponibles en este momento.</p>
+                        @endforelse
                     </div>
                 </div>
 
@@ -342,33 +280,19 @@
                     <h3 class="text-3xl font-black text-white mb-6">Testimonios Reales</h3>
                     <!-- Testimonials List -->
                     <div class="space-y-6">
-                        <div class="bg-black bg-opacity-50 rounded-xl p-6 border border-purple-500 border-opacity-30">
-                            <div class="flex mb-3">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                        @forelse ($testimonies as $testimony)
+                            <div
+                                class="bg-black bg-opacity-50 rounded-xl p-6 border border-purple-500 border-opacity-30">
+                                <div class="flex mb-3">
+                                    <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
+                                </div>
+                                <p class="text-gray-300 mb-4">{{ $testimony->content }}</p>
+                                <p class="font-bold text-white">{{ $testimony->author_name }}</p>
+                                {{-- <p class="text-sm text-purple-400">Miembro desde 2024</p> --}}
                             </div>
-                            <p class="text-gray-300 mb-4">"El mejor gimnasio de Itauguá. Los entrenadores son
-                                excelentes y las instalaciones están siempre limpias. Bajé 15kg en 4 meses."</p>
-                            <p class="font-bold text-white">Roberto Silva</p>
-                            <p class="text-sm text-purple-400">Miembro desde 2024</p>
-                        </div>
-                        <div class="bg-black bg-opacity-50 rounded-xl p-6 border border-purple-500 border-opacity-30">
-                            <div class="flex mb-3">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                            </div>
-                            <p class="text-gray-300 mb-4">"Increíble ambiente y equipos de primera. Mi entrenador
-                                personal me ayudó a alcanzar objetivos que creía imposibles."</p>
-                            <p class="font-bold text-white">Laura Benítez</p>
-                            <p class="text-sm text-purple-400">Miembro desde 2023</p>
-                        </div>
-                        <div class="bg-black bg-opacity-50 rounded-xl p-6 border border-purple-500 border-opacity-30">
-                            <div class="flex mb-3">
-                                <span class="text-yellow-400">⭐⭐⭐⭐⭐</span>
-                            </div>
-                            <p class="text-gray-300 mb-4">"Las clases grupales son súper motivadoras. El aire
-                                acondicionado es un plus enorme. 100% recomendado."</p>
-                            <p class="font-bold text-white">Marcos Díaz</p>
-                            <p class="text-sm text-purple-400">Miembro desde 2024</p>
-                        </div>
+                        @empty
+                            <p class="text-gray-400">No hay testimonios disponibles en este momento.</p>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -387,84 +311,32 @@
 
             <!-- Pricing Cards -->
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Basic Plan -->
-                <div
-                    class="bg-linear-to-brrom-gray-900 to-black border-2 border-gray-800 rounded-2xl p-8 hover:border-purple-500 transition">
-                    <h3 class="text-2xl font-black text-white mb-2">Básica</h3>
-                    <p class="text-gray-400 mb-6">Para comenzar tu transformación</p>
-                    <p class="text-6xl font-black text-white mb-2">150.000</p>
-                    <p class="text-gray-400 mb-8">Gs/mes</p>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Acceso al área de pesas</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Zona cardio completa</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Vestuarios y duchas</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Horario flexible</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Wifi gratis</li>
-                    </ul>
-                    <button
-                        class="w-full py-4 border-2 border-purple-500 text-purple-500 rounded-xl font-bold hover:bg-purple-500 hover:text-white transition">Elegir
-                        Plan</button>
-                </div>
-
-                <!-- Popular Plan -->
-                <div
-                    class="bg-linear-to-br from-purple-900 to-purple-700 rounded-2xl p-8 transform scale-105 shadow-2xl border-2 border-purple-400 relative">
+                @forelse ($memberships as $membership)
                     <div
-                        class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-6 py-2 rounded-full text-sm font-black">
-                        MÁS POPULAR</div>
-                    <h3 class="text-2xl font-black text-white mb-2">Premium</h3>
-                    <p class="text-purple-200 mb-6">La experiencia completa</p>
-                    <p class="text-6xl font-black text-white mb-2">250.000</p>
-                    <p class="text-purple-200 mb-8">Gs/mes</p>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span>
-                            Todo en Básica +</li>
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span>
-                            Clases grupales ilimitadas</li>
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span>
-                            Acceso a todas las áreas</li>
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span> 1
-                            evaluación mensual</li>
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span>
-                            Plan nutricional básico</li>
-                        <li class="flex items-center text-white"><span class="text-yellow-400 mr-3 text-xl">✓</span>
-                            Reservas prioritarias</li>
-                    </ul>
-                    <button
-                        class="w-full py-4 bg-white text-purple-700 rounded-xl font-black hover:bg-yellow-400 transition">Elegir
-                        Plan</button>
-                </div>
-
-                <!-- VIP Plan -->
-                <div
-                    class="bg-linear-to-br from-gray-900 to-black border-2 border-gray-800 rounded-2xl p-8 hover:border-purple-500 transition">
-                    <h3 class="text-2xl font-black text-white mb-2">VIP</h3>
-                    <p class="text-gray-400 mb-6">Máximo nivel de exclusividad</p>
-                    <p class="text-6xl font-black text-white mb-2">400.000</p>
-                    <p class="text-gray-400 mb-8">Gs/mes</p>
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Todo en Premium +</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Entrenador personal 3x semana</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Plan nutricional personalizado</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Evaluaciones semanales</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Acceso a eventos exclusivos</li>
-                        <li class="flex items-center text-gray-300"><span
-                                class="text-purple-500 mr-3 text-xl">✓</span> Toalla y bebida incluida</li>
-                    </ul>
-                    <button
-                        class="w-full py-4 border-2 border-purple-500 text-purple-500 rounded-xl font-bold hover:bg-purple-500 hover:text-white transition">Elegir
-                        Plan</button>
-                </div>
+                        class="bg-linear-to-brrom-gray-900 to-black border-2 border-gray-800 rounded-2xl p-8 hover:border-purple-500 transition">
+                        <h3 class="text-2xl font-black text-white mb-2">{{ $membership->name }}</h3>
+                        <p class="text-gray-400 mb-6">{{ $membership->description }}</p>
+                        <p class="text-6xl font-black text-white mb-2">{{ $membership->price }}</p>
+                        <p class="text-gray-400 mb-8">Gs/mes</p>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center text-gray-300"><span
+                                    class="text-purple-500 mr-3 text-xl">✓</span> Acceso al área de pesas</li>
+                            <li class="flex items-center text-gray-300"><span
+                                    class="text-purple-500 mr-3 text-xl">✓</span> Zona cardio completa</li>
+                            <li class="flex items-center text-gray-300"><span
+                                    class="text-purple-500 mr-3 text-xl">✓</span> Vestuarios y duchas</li>
+                            <li class="flex items-center text-gray-300"><span
+                                    class="text-purple-500 mr-3 text-xl">✓</span> Horario flexible</li>
+                            <li class="flex items-center text-gray-300"><span
+                                    class="text-purple-500 mr-3 text-xl">✓</span> Wifi gratis</li>
+                        </ul>
+                        <button
+                            class="w-full py-4 border-2 border-purple-500 text-purple-500 rounded-xl font-bold hover:bg-purple-500 hover:text-white transition">Elegir
+                            Plan</button>
+                    </div>
+                @empty
+                    <p class="text-gray-400">No hay membresías disponibles en este momento.</p>
+                @endforelse
             </div>
 
             <!-- Payment Methods Note -->
@@ -512,11 +384,11 @@
                 class="grid md:grid-cols-3 gap-6 text-left bg-linear-to-br from-gray-900 to-black rounded-2xl p-8 border border-purple-500 border-opacity-30">
                 <div>
                     <p class="text-purple-400 font-bold mb-2">📞 Teléfono</p>
-                    <p class="text-white text-lg">+595 981 234 567</p>
+                    <p class="text-white text-lg">{{ $settings->contact_phone }}</p>
                 </div>
                 <div>
                     <p class="text-purple-400 font-bold mb-2">📧 Email</p>
-                    <p class="text-white text-lg">info@smartgym.com.py</p>
+                    <p class="text-white text-lg">{{ $settings->contact_email }}</p>
                 </div>
                 <div>
                     <p class="text-purple-400 font-bold mb-2">⏰ Horarios</p>
@@ -529,7 +401,7 @@
     <!-- Footer -->
     <footer class="bg-black border-t border-gray-900 py-12 px-4">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-12">
+            <div class="grid md:grid-cols-3 gap-8 mb-12">
                 <!-- About Section -->
                 <div>
                     <!-- Logo and Description -->
@@ -540,9 +412,9 @@
                         entrenadores profesionales.</p>
                     <!-- Social Media Links -->
                     <div class="flex space-x-4">
-                        <a href="#"
+                        <a href="{{ $settings->instagram_url }}"
                             class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-purple-500 hover:bg-gray-700 transition">IG</a>
-                        <a href="#"
+                        <a href="{{ $settings->whatsapp_url }}"
                             class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-purple-500 hover:bg-gray-700 transition">WA</a>
                     </div>
                 </div>
@@ -557,29 +429,20 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-black text-white mb-4">Servicios</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="#" class="hover:text-purple-500 transition">Entrenamiento Personal</a></li>
-                        <li><a href="#" class="hover:text-purple-500 transition">Clases Grupales</a></li>
-                        <li><a href="#" class="hover:text-purple-500 transition">Nutrición</a></li>
-                        <li><a href="#" class="hover:text-purple-500 transition">Evaluaciones</a></li>
-                    </ul>
-                </div>
-                <div>
                     <!-- Contact Info -->
                     <h4 class="font-black text-white mb-4">Contacto</h4>
                     <ul class="space-y-2 text-gray-500">
                         <li class="flex items-start">
                             <span class="text-purple-500 mr-2">📍</span>
-                            <span>Itauguá, Paraguay</span>
+                            <span>{{ $settings->contact_address }} </span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-purple-500 mr-2">📞</span>
-                            <span>+595 981 234 567</span>
+                            <span>{{ $settings->contact_phone }} </span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-purple-500 mr-2">📧</span>
-                            <span>info@smartgym.com.py</span>
+                            <span>{{ $settings->contact_email }} </span>
                         </li>
                         <li class="flex items-start">
                             <span class="text-purple-500 mr-2">⏰</span>
