@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             FacilitySeeder::class,
             ServiceSeeder::class,
             TestimonySeeder::class,
+            RoutineSeeder::class,
         ]);
     }
 }

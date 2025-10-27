@@ -123,4 +123,17 @@ class User extends Authenticatable implements FilamentUser
             return "{$this->address->street} N° {$this->address->number}, {$this->address->city->name}";
         }
     }
+
+    /**
+     * Relación con UserRoutine
+     */
+    public function userRoutines()
+    {
+        return $this->hasMany(UserRoutine::class);
+    }
+
+    public function assignedRoutines()
+    {
+        return $this->hasMany(UserRoutine::class, 'assigned_by');
+    }
 }
