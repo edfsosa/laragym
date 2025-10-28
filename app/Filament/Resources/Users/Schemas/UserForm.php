@@ -19,34 +19,36 @@ class UserForm
         return $schema
             ->components([
 
-                Section::make('User Information')
-                    ->description('Enter the user details below.')
+                Section::make(__('User Details'))
                     ->schema([
                         TextInput::make('name')
+                            ->label(__('Name'))
+                            ->maxLength(255)
                             ->required(),
                         TextInput::make('email')
-                            ->label('Email address')
+                            ->label(__('Email'))
                             ->email()
+                            ->maxLength(255)
                             ->required(),
                         TextInput::make('password')
-                            ->label('Password')
+                            ->label(__('Password'))
                             ->password()
                             ->visibleOn('create')
                             ->required(fn(string $context) => $context === 'create')
                             ->maxLength(255),
                         Select::make('roles')
-                            ->label('Roles')
+                            ->label(__('Roles'))
                             ->relationship('roles', 'name')
                             ->multiple()
                             ->preload()
                             ->native(false)
                             ->required(),
                         Select::make('status')
-                            ->label('Status')
+                            ->label(__('Status'))
                             ->options([
-                                'active' => 'Active',
-                                'inactive' => 'Inactive',
-                                'suspended' => 'Suspended',
+                                'active' => __('Active'),
+                                'inactive' => __('Inactive'),
+                                'suspended' => __('Suspended'),
                             ])
                             ->native(false)
                             ->default('active')
@@ -55,12 +57,11 @@ class UserForm
                     ->columnSpanFull()
                     ->columns(4),
 
-                Section::make('Personal Data')
-                    ->description('Optional personal data.')
+                Section::make(__('Personal Information'))
                     ->relationship('personalData')
                     ->schema([
                         FileUpload::make('avatar')
-                            ->label('Avatar')
+                            ->label(__('Avatar'))
                             ->image()
                             ->imageEditor()
                             ->avatar()
@@ -69,24 +70,27 @@ class UserForm
                             ->directory('avatars')
                             ->maxSize(2048),
                         DatePicker::make('birth_date')
-                            ->label('Birth Date')
+                            ->label(__('Birth Date'))
                             ->displayFormat('d/m/Y')
                             ->closeOnDateSelection()
                             ->native(false)
                             ->minDate(now()->subYears(100))
                             ->maxDate(now()->subYears(15)),
                         Radio::make('gender')
-                            ->label('Gender')
+                            ->label(__('Gender'))
                             ->options([
-                                'male' => 'Male',
-                                'female' => 'Female'
+                                'male' => __('Male'),
+                                'female' => __('Female')
                             ])
                             ->inline(),
                         TextInput::make('document_number')
-                            ->label('Document Number')
-                            ->maxLength(30),
+                            ->label(__('Document Number'))
+                            ->integer()
+                            ->minValue(1)
+                            ->maxLength(30)
+                            ->step(1),
                         TextInput::make('phone')
-                            ->label('Phone Number')
+                            ->label(__('Phone'))
                             ->tel()
                             ->maxLength(20),
                     ])
@@ -94,23 +98,22 @@ class UserForm
                     ->columns(3)
                     ->visibleOn('edit'),
 
-                Section::make('Address Information')
-                    ->description('Optional address data.')
+                Section::make(__('Address Information'))
                     ->relationship('address')
                     ->schema([
                         Select::make('city_id')
-                            ->label('City')
+                            ->label(__('City'))
                             ->relationship('city', 'name')
                             ->searchable()
                             ->native(false),
                         TextInput::make('street')
-                            ->label('Street')
+                            ->label(__('Street'))
                             ->maxLength(100),
                         TextInput::make('number')
-                            ->label('Number')
+                            ->label(__('Number'))
                             ->maxLength(5),
                         TextInput::make('reference')
-                            ->label('Reference')
+                            ->label(__('Reference'))
                             ->maxLength(150)
                             ->columnSpanFull(),
                     ])
@@ -118,44 +121,43 @@ class UserForm
                     ->columns(3)
                     ->visibleOn('edit'),
 
-                Section::make('Membership Information')
-                    ->description('Optional membership data.')
+                /* Section::make(__('Memberships Information'))
                     ->schema([
                         Repeater::make('memberships')
                             ->relationship()
                             ->schema([
                                 Select::make('membership_id')
-                                    ->label('Membership')
+                                    ->label(__('Membership'))
                                     ->relationship('membership', 'name')
                                     ->searchable()
                                     ->preload()
                                     ->native(false)
                                     ->required(),
                                 DatePicker::make('start_at')
-                                    ->label('Start At')
+                                    ->label(__('Start Date'))
                                     ->displayFormat('d/m/Y')
                                     ->native(false)
                                     ->closeOnDateSelection()
                                     ->default(now())
                                     ->required(),
                                 Select::make('status')
-                                    ->label('Status')
+                                    ->label(__('Status'))
                                     ->options([
-                                        'active' => 'Active',
-                                        'expired' => 'Expired',
-                                        'canceled' => 'Canceled',
+                                        'active' => __('Active'),
+                                        'expired' => __('Expired'),
+                                        'canceled' => __('Canceled'),
                                     ])
                                     ->native(false)
                                     ->visibleOn('edit')
                                     ->required(),
                             ])
+                            ->addActionLabel(__('Add Membership'))
                             ->collapsible()
-                            ->itemNumbers()
                             ->columns(3)
                     ])
                     ->columnSpanFull()
                     ->visibleOn('edit')
-                    ->visible(fn(?User $record) => $record?->hasRole('Member')),
+                    ->visible(fn(?User $record) => $record?->hasRole('Member')), */
             ]);
     }
 }

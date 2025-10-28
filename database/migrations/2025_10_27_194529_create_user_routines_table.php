@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('routine_id')->constrained()->cascadeOnDelete();
             $table->foreignId('assigned_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('assigned_at');
+            $table->timestamp('assigned_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->enum('status', [
                 'assigned',

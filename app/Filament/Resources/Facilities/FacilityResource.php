@@ -19,14 +19,14 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use UnitEnum;
 
 class FacilityResource extends Resource
 {
     protected static ?string $model = Facility::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Landing Page';
+    protected static ?string $navigationLabel = 'Instalaciones';
+    protected static ?string $pluralModelLabel = 'instalaciones';
+    protected static ?string $modelLabel = 'instalación';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPlusCircle;
-
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
@@ -34,25 +34,25 @@ class FacilityResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label('Name')
+                    ->label(__('Name'))
                     ->required()
                     ->maxLength(255),
                 Textarea::make('description')
-                    ->label('Description')
+                    ->label(__('Description'))
                     ->rows(3)
                     ->maxLength(1000),
                 TextInput::make('summary')
-                    ->label('Summary')
+                    ->label(__('Summary'))
                     ->maxLength(255),
                 Toggle::make('is_active')
-                    ->label('Is Active')
+                    ->label(__('Active'))
                     ->visibleOn('edit'),
                 TextInput::make('sort_order')
-                    ->label('Sort Order')
+                    ->label(__('Sort Order'))
                     ->numeric()
                     ->default(0),
                 FileUpload::make('image_path')
-                    ->label('Image')
+                    ->label(__('Image'))
                     ->directory('facilities')
                     ->disk('public')
                     ->image()
@@ -69,22 +69,25 @@ class FacilityResource extends Resource
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
                 TextColumn::make('summary')
-                    ->label('Summary')
+                    ->label(__('Summary'))
                     ->limit(50),
                 ToggleColumn::make('is_active')
-                    ->label('Active')
+                    ->label(__('Active'))
                     ->sortable(),
                 TextColumn::make('sort_order')
-                    ->label('Sort Order')
+                    ->label(__('Sort Order'))
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label(__('Created At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label(__('Updated At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

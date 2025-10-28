@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\Routines\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 
 class RoutineForm
@@ -62,6 +64,61 @@ class RoutineForm
                     ])
                     ->native(false)
                     ->nullable(),
+
+                Repeater::make('routineExercises')
+                    ->relationship()
+                    ->columnSpanFull()
+                    ->addActionLabel(__('Add Exercise'))
+                    ->collapsible()
+                    ->cloneable()
+                    ->reorderableWithButtons()
+                    ->orderColumn('order')
+                    ->schema([
+                        Grid::make(4)
+                            ->schema([
+                                TextInput::make('order')
+                                    ->label(__('Order'))
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->required(),
+                                Select::make('exercise_id')
+                                    ->label(__('Exercise'))
+                                    ->relationship('exercise', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->native(false)
+                                    ->placeholder(__('Select an exercise'))
+                                    ->required(),
+                                TextInput::make('sets')
+                                    ->label(__('Sets'))
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->nullable(),
+                                TextInput::make('reps')
+                                    ->label(__('Reps'))
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->nullable(),
+                            ]),
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('duration_seconds')
+                                    ->label(__('Duration (Seconds)'))
+                                    ->integer()
+                                    ->minValue(1)
+                                    ->nullable(),
+                                TextInput::make('rest_seconds')
+                                    ->label(__('Rest (Seconds)'))
+                                    ->integer()
+                                    ->minValue(0)
+                                    ->nullable(),
+                                TextInput::make('weight_kg')
+                                    ->label(__('Weight (kg)'))
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->nullable(),
+                            ]),
+                    ])
             ]);
     }
 }

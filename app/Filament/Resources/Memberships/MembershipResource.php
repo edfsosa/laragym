@@ -22,9 +22,10 @@ use Filament\Tables\Table;
 class MembershipResource extends Resource
 {
     protected static ?string $model = Membership::class;
-
+    protected static ?string $navigationLabel = 'Membresías';
+    protected static ?string $pluralModelLabel = 'membresías';
+    protected static ?string $modelLabel = 'membresía';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Identification;
-
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
@@ -32,20 +33,34 @@ class MembershipResource extends Resource
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label(__('Name'))
                     ->required(),
-                Textarea::make('description')
-                    ->default(null)
-                    ->columnSpanFull(),
                 TextInput::make('price')
+                    ->label(__('Price'))
                     ->required()
-                    ->numeric()
-                    ->prefix('$'),
+                    ->integer()
+                    ->minValue(0)
+                    ->maxLength(10)
+                    ->step(1)
+                    ->prefix('PYG '),
                 TextInput::make('duration_days')
+                    ->label(__('Duration (days)'))
                     ->required()
-                    ->numeric(),
+                    ->integer()
+                    ->minValue(1)
+                    ->maxValue(365)
+                    ->step(1)
+                    ->helperText(__('Duration of the membership in days.')),
+                Textarea::make('description')
+                    ->label(__('Description'))
+                    ->columnSpanFull()
+                    ->rows(3)
+                    ->nullable(),
                 Toggle::make('is_active')
+                    ->label(__('Is Active'))
                     ->required(),
-            ]);
+            ])
+            ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -54,21 +69,27 @@ class MembershipResource extends Resource
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->label(__('Price'))
+                    ->money('PYG', true)
                     ->sortable(),
                 TextColumn::make('duration_days')
+                    ->label(__('Duration (days)'))
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('is_active')
+                    ->label(__('Is Active'))
                     ->boolean(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label(__('Created At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label(__('Updated At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

@@ -21,7 +21,9 @@ use UnitEnum;
 class TestimonyResource extends Resource
 {
     protected static ?string $model = Testimony::class;
-    protected static string | UnitEnum | null $navigationGroup = 'Landing Page';
+    protected static ?string $navigationLabel = 'Testimonios';
+    protected static ?string $pluralModelLabel = 'testimonios';
+    protected static ?string $modelLabel = 'testimonio';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChatBubbleLeftRight;
 
     public static function form(Schema $schema): Schema
@@ -29,8 +31,12 @@ class TestimonyResource extends Resource
         return $schema
             ->components([
                 TextInput::make('author_name')
+                    ->label(__('Author Name'))
+                    ->maxLength(255)
                     ->required(),
                 Textarea::make('content')
+                    ->label(__('Content'))
+                    ->rows(5)
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -41,13 +47,20 @@ class TestimonyResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('author_name')
-                    ->searchable(),
+                    ->label(__('Author Name'))
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('content')
+                    ->label(__('Content'))
+                    ->limit(80),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label(__('Created At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label(__('Updated At'))
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
