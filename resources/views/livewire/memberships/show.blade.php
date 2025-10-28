@@ -18,11 +18,11 @@ new #[Title('Membership Details')] class extends Component {
     @php
         $breadcrumbs = [
             [
-                'label' => 'Home',
+                'label' => __('Dashboard'),
                 'link' => '/dashboard',
             ],
             [
-                'label' => 'Memberships',
+                'label' => __('Memberships'),
                 'link' => '/memberships',
             ],
             [
@@ -45,8 +45,8 @@ new #[Title('Membership Details')] class extends Component {
         </x-slot:menu>
 
         <div class="space-y-2">
-            <p><strong>Start at:</strong> {{ $membership->start_at->diffForHumans() }}</p>
-            <p><strong>Price:</strong> {{ $membership->membership_price }}</p>
+            <p><strong>{{ __('Started') }}:</strong> {{ $membership->start_at->diffForHumans() }}</p>
+            <p><strong>{{ __('Price') }}:</strong> {{ $membership->membership_price }}</p>
         </div>
     </x-card>
 </div>

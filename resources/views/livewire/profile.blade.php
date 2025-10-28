@@ -19,7 +19,7 @@ new #[Title('Profile')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="Profile" separator />
+    <x-header title="{{ __('Profile') }}" separator />
 
     <!-- PROFILE DETAILS -->
 
@@ -36,7 +36,7 @@ new #[Title('Profile')] class extends Component {
     @if ($user->personalData)
         <x-collapse class="mt-6">
             <x-slot:heading>
-                More Information
+                {{ __('Personal information') }}
             </x-slot:heading>
             <x-slot:content class="grid gap-2">
                 <x-icon name="o-phone" label="Phone: {{ $user->phone }}" class="mb-2" />
@@ -48,7 +48,7 @@ new #[Title('Profile')] class extends Component {
     @if ($user->address)
         <x-collapse class="mt-6">
             <x-slot:heading>
-                Address Information
+                {{ __('Address information') }}
             </x-slot:heading>
             <x-slot:content class="grid gap-2">
                 <x-icon name="o-map" label="Address: {{ $user->full_address }}" class="mb-2" />

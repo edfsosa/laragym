@@ -92,13 +92,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 <div>
     <x-form method="POST" wire:submit="login">
         <!-- Email Address -->
-        <x-input label="{{ __('Email address') }}" wire:model="email" type="email" icon="o-envelope" />
+        <x-input label="{{ __('Email') }}" wire:model="email" type="email" icon="o-envelope" />
 
         <!-- Password -->
         <x-password label="{{ __('Password') }}" wire:model="password" icon="o-key" right />
 
         <x-slot:actions>
-            <x-button label="{{ __('Log in') }}" type="submit" class="w-full btn-primary" spinner="login" />
+            <x-button label="{{ __('Log In') }}" type="submit" class="w-full btn-primary" spinner="login" />
         </x-slot:actions>
     </x-form>
 </div>

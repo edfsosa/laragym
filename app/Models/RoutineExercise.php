@@ -36,8 +36,18 @@ class RoutineExercise extends Model
         return $this->belongsTo(Exercise::class);
     }
 
-    public function userRoutineExerciseLogs()
+    public function logs()
     {
         return $this->hasMany(UserRoutineExerciseLog::class, 'routine_exercise_id');
+    }
+
+    public function getExerciseNameAttribute()
+    {
+        return $this->exercise ? $this->exercise->name : null;
+    }
+
+    public function getExerciseDescriptionAttribute()
+    {
+        return $this->exercise ? $this->exercise->description : null;
     }
 }

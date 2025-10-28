@@ -26,16 +26,16 @@ new #[Title('Memberships')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="Memberships" separator progress-indicator />
+    <x-header title="{{ __('Your memberships') }}" separator progress-indicator />
 
     @php
         $breadcrumbs = [
             [
-                'label' => 'Home',
+                'label' => __('Dashboard'),
                 'link' => '/dashboard',
             ],
             [
-                'label' => 'Memberships',
+                'label' => __('Memberships'),
                 'link' => '/memberships',
             ],
         ];
@@ -54,8 +54,8 @@ new #[Title('Memberships')] class extends Component {
             </x-list-item>
         </x-card>
     @empty
-        <x-alert title="No memberships found"
-            description="You do not have any memberships at the moment. Please check back later or contact support for more information."
+        <x-alert title="{{__('No memberships found')}}"
+            description="{{ __('You do not have any memberships at the moment. Please check back later or contact support for more information.') }}"
             icon="o-exclamation-triangle" />
     @endforelse
 </div>
