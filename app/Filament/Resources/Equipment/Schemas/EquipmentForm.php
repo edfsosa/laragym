@@ -22,12 +22,12 @@ class EquipmentForm
                 Select::make('type')
                     ->label(__('Type'))
                     ->options([
-                        'cardio' => 'Cardio',
-                        'strength' => 'Strength',
-                        'flexibility' => 'Flexibility',
-                        'balance' => 'Balance',
-                        'mobility' => 'Mobility',
-                        'other' => 'Other',
+                        'cardio' => __('Cardio'),
+                        'strength' => __('Strength'),
+                        'flexibility' => __('Flexibility'),
+                        'balance' => __('Balance'),
+                        'mobility' => __('Mobility'),
+                        'other' => __('Other'),
                     ])
                     ->native(false)
                     ->required(),

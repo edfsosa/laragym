@@ -29,8 +29,8 @@ class StatsOverview extends StatsOverviewWidget
             Stat::make(__('Active memberships'), $activeMemberships)
                 ->description(__('Total number of active memberships'))
                 ->color('primary'),
-            Stat::make(__('Available equipment'), $availableEquipments)
-                ->description(__('Total number of available equipment'))
+            Stat::make(__('Available equipments'), $availableEquipments)
+                ->description(__('Total number of available equipments'))
                 ->color('primary'),
         ];
     }

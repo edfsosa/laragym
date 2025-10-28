@@ -10,17 +10,13 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 
 class UserRoutineResource extends Resource
 {
@@ -53,7 +49,7 @@ class UserRoutineResource extends Resource
                     ->label(__('Status'))
                     ->options([
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),
@@ -90,7 +86,7 @@ class UserRoutineResource extends Resource
                     })
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),
@@ -98,11 +94,11 @@ class UserRoutineResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('assignedBy.name')
-                    ->label(__('Assigned By'))
+                    ->label(__('Assigned by'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('assigned_at')
-                    ->label(__('Assigned At'))
+                    ->label(__('Assigned at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
@@ -111,7 +107,7 @@ class UserRoutineResource extends Resource
                     ->label(__('Status'))
                     ->options([
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),

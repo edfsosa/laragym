@@ -60,12 +60,12 @@ class EquipmentTable
                     })
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label(__('Created'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

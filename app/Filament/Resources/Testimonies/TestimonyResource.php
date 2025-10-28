@@ -54,12 +54,12 @@ class TestimonyResource extends Resource
                     ->label(__('Content'))
                     ->limit(80),
                 TextColumn::make('created_at')
-                    ->label(__('Created At'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated At'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -26,7 +26,7 @@ class ServiceResource extends Resource
     protected static ?string $navigationLabel = 'Servicios';
     protected static ?string $pluralModelLabel = 'servicios';
     protected static ?string $modelLabel = 'servicio';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBolt;
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
@@ -40,6 +40,10 @@ class ServiceResource extends Resource
                 TextInput::make('summary')
                     ->label(__('Summary'))
                     ->maxLength(255),
+                TextInput::make('sort_order')
+                    ->label(__('Order'))
+                    ->numeric()
+                    ->default(0),
                 Textarea::make('description')
                     ->label(__('Description'))
                     ->rows(3)
@@ -51,11 +55,7 @@ class ServiceResource extends Resource
                 Toggle::make('is_featured')
                     ->label(__('Featured'))
                     ->visibleOn('edit'),
-                TextInput::make('sort_order')
-                    ->label(__('Sort Order'))
-                    ->numeric()
-                    ->default(0),
-            ]);
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -73,15 +73,15 @@ class ServiceResource extends Resource
                     ->label(__('Active'))
                     ->sortable(),
                 TextColumn::make('sort_order')
-                    ->label(__('Sort Order'))
+                    ->label(__('Order'))
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label(__('Created At'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated At'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

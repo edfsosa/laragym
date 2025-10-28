@@ -48,7 +48,7 @@ class FacilityResource extends Resource
                     ->label(__('Active'))
                     ->visibleOn('edit'),
                 TextInput::make('sort_order')
-                    ->label(__('Sort Order'))
+                    ->label(__('Order'))
                     ->numeric()
                     ->default(0),
                 FileUpload::make('image_path')
@@ -78,15 +78,15 @@ class FacilityResource extends Resource
                     ->label(__('Active'))
                     ->sortable(),
                 TextColumn::make('sort_order')
-                    ->label(__('Sort Order'))
+                    ->label(__('Order'))
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label(__('Created At'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated At'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -36,7 +36,7 @@ class UserRoutinesRelationManager extends RelationManager
                     ->label(__('Status'))
                     ->options([
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),
@@ -69,7 +69,7 @@ class UserRoutinesRelationManager extends RelationManager
                     })
                     ->formatStateUsing(fn(string $state): string => match ($state) {
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),
@@ -77,11 +77,11 @@ class UserRoutinesRelationManager extends RelationManager
                     })
                     ->sortable(),
                 TextColumn::make('assignedBy.name')
-                    ->label(__('Assigned By'))
+                    ->label(__('Assigned by'))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('assigned_at')
-                    ->label(__('Assigned At'))
+                    ->label(__('Assigned at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable(),
             ])
@@ -90,7 +90,7 @@ class UserRoutinesRelationManager extends RelationManager
                     ->label(__('Status'))
                     ->options([
                         'assigned' => __('Assigned'),
-                        'in_progress' => __('In Progress'),
+                        'in_progress' => __('In progress'),
                         'paused' => __('Paused'),
                         'completed' => __('Completed'),
                         'cancelled' => __('Cancelled'),

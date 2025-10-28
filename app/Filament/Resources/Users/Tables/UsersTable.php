@@ -30,6 +30,12 @@ class UsersTable
                     ->sortable(),
                 TextColumn::make('roles.name')
                     ->label(__('Role'))
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        'Admin' => __('Administrator'),
+                        'Trainer' => __('Trainer'),
+                        'Member' => __('Member'),
+                        default => __('Unknown'),
+                    })
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('Status'))
@@ -48,12 +54,12 @@ class UsersTable
                     })
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label(__('Created At'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated At'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

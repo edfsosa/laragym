@@ -15,21 +15,21 @@ class MembershipSeeder extends Seeder
     {
         $memberships = [
             [
-                'name' => 'Basic Membership',
-                'description' => 'Access to basic features and content.',
+                'name' => 'Básica Mensual',
+                'description' => 'Acceso a funciones básicas por un mes.',
                 'price' => 100000.00,
                 'duration_days' => 30,
             ],
             [
-                'name' => 'Premium Membership',
-                'description' => 'Access to all features and premium content.',
+                'name' => 'Premium Mensual',
+                'description' => 'Acceso completo por un mes con beneficios adicionales.',
                 'price' => 200000.00,
                 'duration_days' => 30,
             ],
             [
-                'name' => 'Annual Membership',
-                'description' => 'Full access for a year with a discount.',
-                'price' => 1000000.00,
+                'name' => 'Premium Anual',
+                'description' => 'Acceso completo por un año con beneficios adicionales.',
+                'price' => 2000000.00,
                 'duration_days' => 365,
             ],
         ];

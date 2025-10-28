@@ -14,6 +14,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -33,34 +34,38 @@ class ExerciseResource extends Resource
     {
         return $schema
             ->components([
-                Select::make('equipment_id')
-                    ->label(__('Equipment'))
-                    ->relationship('equipment', 'name')
-                    ->preload()
-                    ->searchable()
-                    ->native(false)
-                    ->nullable(),
-                TextInput::make('name')
-                    ->label(__('Name'))
-                    ->required(),
+                Grid::make(3)
+                    ->columnSpanFull()
+                    ->schema([
+                        Select::make('equipment_id')
+                            ->label(__('Equipment'))
+                            ->relationship('equipment', 'name')
+                            ->preload()
+                            ->searchable()
+                            ->native(false)
+                            ->nullable(),
+                        TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required(),
+                        Select::make('muscle_group')
+                            ->label(__('Muscle group'))
+                            ->options([
+                                'Chest' => __('Chest'),
+                                'Back' => __('Back'),
+                                'Legs' => __('Legs'),
+                                'Arms' => __('Arms'),
+                                'Shoulders' => __('Shoulders'),
+                                'Core' => __('Core'),
+                                'Full Body' => __('Full body'),
+                            ])
+                            ->native(false)
+                            ->nullable(),
+                    ]),
                 Textarea::make('description')
                     ->label(__('Description'))
                     ->columnSpanFull()
                     ->rows(3)
                     ->maxLength(1000)
-                    ->nullable(),
-                Select::make('muscle_group')
-                    ->label(__('Muscle group'))
-                    ->options([
-                        'Chest' => 'Chest',
-                        'Back' => 'Back',
-                        'Legs' => 'Legs',
-                        'Arms' => 'Arms',
-                        'Shoulders' => 'Shoulders',
-                        'Core' => 'Core',
-                        'Full Body' => 'Full body',
-                    ])
-                    ->native(false)
                     ->nullable(),
                 TextInput::make('video_url')
                     ->label(__('Video URL'))
@@ -96,12 +101,12 @@ class ExerciseResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('created_at')
-                    ->label(__('Created'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -118,6 +123,11 @@ class ExerciseResource extends Resource
                         'Core' => __('Core'),
                         'Full Body' => __('Full body'),
                     ])
+                    ->multiple()
+                    ->native(false),
+                SelectFilter::make('equipment_id')
+                    ->label(__('Equipment'))
+                    ->relationship('equipment', 'name')
                     ->multiple()
                     ->native(false),
             ])

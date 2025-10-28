@@ -172,11 +172,11 @@
                     <!-- Stats -->
                     <div class="mt-10 grid grid-cols-3 gap-6">
                         <div class="text-center">
-                            <p class="text-4xl font-black gym-purple">500+</p>
+                            <p class="text-4xl font-black gym-purple">50+</p>
                             <p class="text-gray-400 text-sm">Equipos Modernos</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-4xl font-black gym-purple">15+</p>
+                            <p class="text-4xl font-black gym-purple">10+</p>
                             <p class="text-gray-400 text-sm">Entrenadores Pro</p>
                         </div>
                         <div class="text-center">
@@ -316,8 +316,7 @@
                         class="bg-linear-to-brrom-gray-900 to-black border-2 border-gray-800 rounded-2xl p-8 hover:border-purple-500 transition">
                         <h3 class="text-2xl font-black text-white mb-2">{{ $membership->name }}</h3>
                         <p class="text-gray-400 mb-6">{{ $membership->description }}</p>
-                        <p class="text-6xl font-black text-white mb-2">{{ $membership->price }}</p>
-                        <p class="text-gray-400 mb-8">Gs/mes</p>
+                        <p class="text-5xl font-black text-white mb-2">{{ $membership->price_format }}</p>
                         <ul class="space-y-4 mb-8">
                             <li class="flex items-center text-gray-300"><span
                                     class="text-purple-500 mr-3 text-xl">✓</span> Acceso al área de pesas</li>

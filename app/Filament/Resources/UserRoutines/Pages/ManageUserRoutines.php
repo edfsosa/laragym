@@ -15,7 +15,7 @@ class ManageUserRoutines extends ManageRecords
     {
         return [
             CreateAction::make()
-                ->label(__('Assign Routine'))
+                ->label(__('Assign routine'))
                 ->mutateDataUsing(function (array $data): array {
                     $data['assigned_by'] = Auth::id();
                     $data['assigned_at'] = now();

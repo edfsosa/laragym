@@ -24,4 +24,9 @@ class Membership extends Model
     {
         return $this->hasMany(UserMembership::class);
     }
+
+    public function getPriceFormatAttribute() // precio en guaranies paraguayos
+    {
+        return '₲ ' . number_format($this->price, 0, ',', '.');
+    }
 }

@@ -57,7 +57,8 @@ class MembershipResource extends Resource
                     ->rows(3)
                     ->nullable(),
                 Toggle::make('is_active')
-                    ->label(__('Is Active'))
+                    ->label(__('Active'))
+                    ->default(true)
                     ->required(),
             ])
             ->columns(3);
@@ -80,15 +81,15 @@ class MembershipResource extends Resource
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('is_active')
-                    ->label(__('Is Active'))
+                    ->label(__('Active'))
                     ->boolean(),
                 TextColumn::make('created_at')
-                    ->label(__('Created At'))
+                    ->label(__('Created at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->label(__('Updated At'))
+                    ->label(__('Updated at'))
                     ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

@@ -33,11 +33,10 @@ class RoutineForm
                         'intermediate' => __('Intermediate'),
                         'advanced' => __('Advanced'),
                     ])
-                    ->default('beginner')
                     ->native(false)
                     ->required(),
                 TextInput::make('duration_minutes')
-                    ->label(__('Duration (Minutes)'))
+                    ->label(__('Duration (minutes)'))
                     ->integer()
                     ->minValue(1)
                     ->maxValue(300)
@@ -51,15 +50,14 @@ class RoutineForm
                         'flexibility' => __('Flexibility'),
                         'balance' => __('Balance'),
                     ])
-                    ->default('strength')
                     ->native(false)
                     ->required(),
                 Select::make('muscle_group')
-                    ->label(__('Muscle Group'))
+                    ->label(__('Muscle group'))
                     ->options([
-                        'full_body' => __('Full Body'),
-                        'upper_body' => __('Upper Body'),
-                        'lower_body' => __('Lower Body'),
+                        'full_body' => __('Full body'),
+                        'upper_body' => __('Upper body'),
+                        'lower_body' => __('Lower body'),
                         'core' => __('Core'),
                     ])
                     ->native(false)
@@ -68,7 +66,7 @@ class RoutineForm
                 Repeater::make('routineExercises')
                     ->relationship()
                     ->columnSpanFull()
-                    ->addActionLabel(__('Add Exercise'))
+                    ->addActionLabel(__('Add'))
                     ->collapsible()
                     ->cloneable()
                     ->reorderableWithButtons()
@@ -87,7 +85,6 @@ class RoutineForm
                                     ->searchable()
                                     ->preload()
                                     ->native(false)
-                                    ->placeholder(__('Select an exercise'))
                                     ->required(),
                                 TextInput::make('sets')
                                     ->label(__('Sets'))
@@ -103,12 +100,12 @@ class RoutineForm
                         Grid::make(3)
                             ->schema([
                                 TextInput::make('duration_seconds')
-                                    ->label(__('Duration (Seconds)'))
+                                    ->label(__('Duration (seconds)'))
                                     ->integer()
                                     ->minValue(1)
                                     ->nullable(),
                                 TextInput::make('rest_seconds')
-                                    ->label(__('Rest (Seconds)'))
+                                    ->label(__('Rest (seconds)'))
                                     ->integer()
                                     ->minValue(0)
                                     ->nullable(),

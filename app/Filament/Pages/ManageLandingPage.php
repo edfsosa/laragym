@@ -24,17 +24,17 @@ class ManageLandingPage extends SettingsPage
     {
         return $schema
             ->components([
-                Section::make(__('Contact Details'))
+                Section::make(__('Contact details'))
                     ->schema([
                         TextInput::make('contact_email')
-                            ->label(__('Contact Email'))
+                            ->label(__('Contact email'))
                             ->email()
                             ->required(),
                         TextInput::make('contact_phone')
-                            ->label(__('Contact Phone'))
+                            ->label(__('Contact phone'))
                             ->required(),
                         TextInput::make('contact_address')
-                            ->label(__('Contact Address'))
+                            ->label(__('Contact address'))
                             ->required(),
                         TextInput::make('google_maps_embed')
                             ->label('Embed de Google Maps')
@@ -42,7 +42,7 @@ class ManageLandingPage extends SettingsPage
                     ])
                     ->columns(2)
                     ->columnSpanFull(),
-                Section::make(__('Social Media Links'))
+                Section::make(__('Social media links'))
                     ->schema([
                         TextInput::make('instagram_url')
                             ->label(__('Instagram URL'))

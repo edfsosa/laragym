@@ -19,7 +19,7 @@ class UserForm
         return $schema
             ->components([
 
-                Section::make(__('User Details'))
+                Section::make(__('User details'))
                     ->schema([
                         TextInput::make('name')
                             ->label(__('Name'))
@@ -57,7 +57,7 @@ class UserForm
                     ->columnSpanFull()
                     ->columns(4),
 
-                Section::make(__('Personal Information'))
+                Section::make(__('Personal information'))
                     ->relationship('personalData')
                     ->schema([
                         FileUpload::make('avatar')
@@ -84,7 +84,7 @@ class UserForm
                             ])
                             ->inline(),
                         TextInput::make('document_number')
-                            ->label(__('Document Number'))
+                            ->label(__('Document number'))
                             ->integer()
                             ->minValue(1)
                             ->maxLength(30)
@@ -98,7 +98,7 @@ class UserForm
                     ->columns(3)
                     ->visibleOn('edit'),
 
-                Section::make(__('Address Information'))
+                Section::make(__('Address information'))
                     ->relationship('address')
                     ->schema([
                         Select::make('city_id')
@@ -121,7 +121,7 @@ class UserForm
                     ->columns(3)
                     ->visibleOn('edit'),
 
-                /* Section::make(__('Memberships Information'))
+                /* Section::make(__('Memberships information'))
                     ->schema([
                         Repeater::make('memberships')
                             ->relationship()
@@ -134,7 +134,7 @@ class UserForm
                                     ->native(false)
                                     ->required(),
                                 DatePicker::make('start_at')
-                                    ->label(__('Start Date'))
+                                    ->label(__('Start at'))
                                     ->displayFormat('d/m/Y')
                                     ->native(false)
                                     ->closeOnDateSelection()
@@ -151,7 +151,7 @@ class UserForm
                                     ->visibleOn('edit')
                                     ->required(),
                             ])
-                            ->addActionLabel(__('Add Membership'))
+                            ->addActionLabel(__('Add'))
                             ->collapsible()
                             ->columns(3)
                     ])
