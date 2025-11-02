@@ -68,6 +68,24 @@ class UserRoutine extends Model
         }
     }
 
+    public function getRoutineLevelBadgeAttribute()
+    {
+        if (!$this->routine) {
+            return null;
+        }
+
+        switch ($this->routine->level) {
+            case 'beginner':
+                return 'badge-success';
+            case 'intermediate':
+                return 'badge-warning';
+            case 'advanced':
+                return 'badge-error';
+            default:
+                return 'badge-secondary';
+        }
+    }
+
     public function getRoutineDurationMinutesAttribute()
     {
         return $this->routine ? $this->routine->duration_minutes : null;
@@ -121,5 +139,37 @@ class UserRoutine extends Model
                 ]);
             }
         });
+    }
+
+    public function getExerciseLogsCountAttribute()
+    {
+        return $this->exerciseLogs()->count();
+    }
+
+    public function getExerciseLogsCompletedCountAttribute()
+    {
+        return $this->exerciseLogs()->where('status', 'completed')->count();
+    }
+
+    public function getRoutineExercisesCountAttribute()
+    {
+        return $this->routine ? $this->routine->routineExercises()->count() : 0;
+    }
+
+    public function getProgressPercentageAttribute()
+    {
+        $totalExercises = $this->getRoutineExercisesCountAttribute();
+        if ($totalExercises === 0) {
+            return 0;
+        }
+
+        $completedExercises = $this->getExerciseLogsCompletedCountAttribute();
+
+        return round(($completedExercises / $totalExercises) * 100, 2);
+    }
+
+    public function getCompletedAtFormattedAttribute()
+    {
+        return $this->completed_at ? $this->completed_at->diffForHumans() : null;
     }
 }

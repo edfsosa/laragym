@@ -9,8 +9,7 @@ use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 use Livewire\Attributes\Title;
 
-new #[Title('Routine Details')] 
-class extends Component {
+new #[Title('Completed Routine Details')] class extends Component {
     use Toast;
 
     public UserRoutine $routine;
@@ -23,54 +22,6 @@ class extends Component {
     public function logs(): Collection
     {
         return UserRoutineExerciseLog::query()->when($this->routine->id, fn(Builder $q) => $q->where('user_routine_id', $this->routine->id))->get();
-    }
-
-    // logica de complete
-    public function complete(int $logId): void
-    {
-        $log = UserRoutineExerciseLog::find($logId);
-
-        if (!$log) {
-            $this->error('Error');
-            return;
-        }
-
-        if ($log->status === 'completed') {
-            $this->error('This exercise is already completed.');
-            return;
-        }
-
-        if ($log->status === 'skipped') {
-            $this->error('This exercise has been skipped and cannot be marked as completed.');
-            return;
-        }
-
-        if ($log->status === 'pending') {
-            $log->status = 'completed';
-            $log->completed_at = now();
-            $log->save();
-
-            $this->routine = $this->routine->fresh();
-            $this->success('Exercise marked as completed');
-            $this->updateRoutineStatusIfNeeded();
-            return;
-        }
-    }
-
-    private function updateRoutineStatusIfNeeded(): void
-    {
-        $totalExercises = UserRoutineExerciseLog::where('user_routine_id', $this->routine->id)->count();
-        $completedExercises = UserRoutineExerciseLog::where('user_routine_id', $this->routine->id)
-            ->where('status', 'completed')
-            ->count();
-
-        if ($totalExercises > 0 && $totalExercises === $completedExercises) {
-            $this->routine->status = 'completed';
-            $this->routine->completed_at = now();
-            $this->routine->save();
-            $this->routine = $this->routine->fresh();
-            $this->success('Routine marked as completed');
-        }
     }
 
     public function with(): array
@@ -97,14 +48,19 @@ class extends Component {
                 'link' => '/routines',
             ],
             [
+                'label' => __('Completed'),
+                'link' => '/routines/completed',
+            ],
+            [
                 'label' => $routine->routine_name,
+                'link' => null,
             ],
         ];
     @endphp
 
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
-    {{--  MEMBERSHIP BODY  --}}
+    {{--  CONTENT  --}}
     <x-card separator shadow>
         {{--  TITLE --}}
         <x-slot:title>
