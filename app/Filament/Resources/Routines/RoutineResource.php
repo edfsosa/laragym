@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class RoutineResource extends Resource
 {
@@ -20,6 +21,7 @@ class RoutineResource extends Resource
     protected static ?string $navigationLabel = 'Rutinas';
     protected static ?string $pluralModelLabel = 'rutinas';
     protected static ?string $modelLabel = 'rutina';
+    protected static string | UnitEnum | null $navigationGroup = 'Entrenamiento';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
     protected static ?string $recordTitleAttribute = 'name';
 

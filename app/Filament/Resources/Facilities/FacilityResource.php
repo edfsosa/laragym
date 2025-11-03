@@ -19,6 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class FacilityResource extends Resource
 {
@@ -26,6 +27,7 @@ class FacilityResource extends Resource
     protected static ?string $navigationLabel = 'Instalaciones';
     protected static ?string $pluralModelLabel = 'instalaciones';
     protected static ?string $modelLabel = 'instalación';
+    protected static string | UnitEnum | null $navigationGroup = 'Gimnasio';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPlusCircle;
     protected static ?string $recordTitleAttribute = 'name';
 

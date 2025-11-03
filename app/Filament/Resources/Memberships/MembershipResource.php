@@ -18,14 +18,17 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class MembershipResource extends Resource
 {
     protected static ?string $model = Membership::class;
-    protected static ?string $navigationLabel = 'Membresías';
-    protected static ?string $pluralModelLabel = 'membresías';
-    protected static ?string $modelLabel = 'membresía';
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Identification;
+    protected static ?string $navigationLabel = 'Tipos de membresías';
+    protected static ?string $pluralModelLabel = 'tipos de membresías';
+    protected static ?string $modelLabel = 'tipo de membresía';
+    protected static ?string $slug = 'membership-types';
+    protected static string | UnitEnum | null $navigationGroup = 'Membresías';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPencilSquare;
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema

@@ -9,9 +9,11 @@ use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use UnitEnum;
 
 class ManageLandingPage extends SettingsPage
 {
+    protected static string | UnitEnum | null $navigationGroup = 'Gimnasio';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCog6Tooth;
     protected static string $settings = SettingsLandingPageSettings::class;
     protected static ?string $navigationLabel = 'Landing Page';

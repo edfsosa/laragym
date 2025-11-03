@@ -20,6 +20,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ExerciseResource extends Resource
 {
@@ -27,6 +28,7 @@ class ExerciseResource extends Resource
     protected static ?string $navigationLabel = 'Ejercicios';
     protected static ?string $pluralModelLabel = 'ejercicios';
     protected static ?string $modelLabel = 'ejercicio';
+    protected static string | UnitEnum | null $navigationGroup = 'Entrenamiento';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPlayCircle;
     protected static ?string $recordTitleAttribute = 'name';
 

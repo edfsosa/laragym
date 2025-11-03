@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class EquipmentResource extends Resource
 {
@@ -20,6 +21,7 @@ class EquipmentResource extends Resource
     protected static ?string $navigationLabel = 'Equipos';
     protected static ?string $pluralModelLabel = 'equipos';
     protected static ?string $modelLabel = 'equipo';
+    protected static string | UnitEnum | null $navigationGroup = 'Gimnasio';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
     protected static ?string $recordTitleAttribute = 'name';
 

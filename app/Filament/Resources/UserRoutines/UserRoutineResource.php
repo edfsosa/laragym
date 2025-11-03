@@ -17,6 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class UserRoutineResource extends Resource
 {
@@ -25,6 +26,7 @@ class UserRoutineResource extends Resource
     protected static ?string $pluralModelLabel = 'rutinas asignadas';
     protected static ?string $modelLabel = 'rutina asignada';
     protected static ?string $slug = 'assigned-routines';
+    protected static string | UnitEnum | null $navigationGroup = 'Entrenamiento';
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCheckBadge;
 
     public static function form(Schema $schema): Schema
