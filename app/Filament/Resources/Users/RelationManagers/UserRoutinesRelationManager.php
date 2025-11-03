@@ -14,12 +14,12 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class UserRoutinesRelationManager extends RelationManager
 {
     protected static string $relationship = 'userRoutines';
-    protected static ?string $title = 'Assigned Routines';
 
     public function form(Schema $schema): Schema
     {
@@ -105,7 +105,7 @@ class UserRoutinesRelationManager extends RelationManager
             ])
             ->headerActions([
                 CreateAction::make()
-                    ->label(__('Assign Routine'))
+                    ->label(__('Assign'))
                     ->mutateDataUsing(function (array $data): array {
                         $data['assigned_by'] = Auth::id();
                         $data['assigned_at'] = now();
@@ -121,5 +121,10 @@ class UserRoutinesRelationManager extends RelationManager
                     DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('Routines');
     }
 }
