@@ -31,17 +31,17 @@ class extends Component {
         $log = UserRoutineExerciseLog::find($logId);
 
         if (!$log) {
-            $this->error('Error');
+            $this->error(__('Exercise log not found.'));
             return;
         }
 
         if ($log->status === 'completed') {
-            $this->error('This exercise is already completed.');
+            $this->error(__('This exercise is already marked as completed.'));
             return;
         }
 
         if ($log->status === 'skipped') {
-            $this->error('This exercise has been skipped and cannot be marked as completed.');
+            $this->error(__('This exercise has been skipped and cannot be marked as completed.'));
             return;
         }
 
@@ -51,7 +51,7 @@ class extends Component {
             $log->save();
 
             $this->routine = $this->routine->fresh();
-            $this->success('Exercise marked as completed');
+            $this->success(__('Exercise marked as completed.'));
             $this->updateRoutineStatusIfNeeded();
             return;
         }
@@ -69,7 +69,7 @@ class extends Component {
             $this->routine->completed_at = now();
             $this->routine->save();
             $this->routine = $this->routine->fresh();
-            $this->success('Routine marked as completed');
+            $this->success(__('Congratulations! You have completed the routine.'));
         }
     }
 

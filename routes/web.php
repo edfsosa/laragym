@@ -10,7 +10,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de membresías
     Volt::route('/memberships', 'memberships.index')->name('memberships.index');
-    Volt::route('/memberships/{membership}', 'memberships.show')->name('memberships.show');
+    Volt::route('/memberships/{membership}/show', 'memberships.show')->name('memberships.show');
+    Volt::route('/memberships/{membership}/payments', 'memberships.payments')->name('memberships.payments');
 
     // Rutas de rutinas
     Volt::route('/routines', 'routines.index')->name('routines.index');

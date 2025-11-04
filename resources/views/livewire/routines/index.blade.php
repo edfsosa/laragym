@@ -59,13 +59,13 @@ class extends Component {
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
     @if ($assignedRoutines->isEmpty() && $completedRoutines->isEmpty())
-        <x-alert title="{{ __('No Routines Found') }}"
+        <x-alert title="{{ __('No routines found') }}"
             description="{{ __('You have no assigned or completed routines at the moment.') }}" icon="o-check-circle"
             class="alert-info mt-8" />
     @endif
 
     @if ($assignedRoutines->isNotEmpty())
-        <x-header title="{{ __('Assigned Routines') }}" size="text-lg" class="mt-8" />
+        <x-header title="{{ __('Assigned routines') }}" size="text-lg" class="mt-8" />
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($assignedRoutines as $assignedRoutine)
                 <x-card title="{{ $assignedRoutine->routine_name }}" shadow>
@@ -95,7 +95,7 @@ class extends Component {
     @endif
 
     @if ($completedRoutines->isNotEmpty())
-        <x-header title="{{ __('Recently Completed Routines') }}" size="text-lg" class="mt-8" />
+        <x-header title="{{ __('Recently completed routines') }}" size="text-lg" class="mt-8" />
         <x-card shadow>
             @foreach ($completedRoutines as $completedRoutine)
                 <x-list-item :item="$completedRoutine">
@@ -116,7 +116,7 @@ class extends Component {
             <x-slot:actions separator>
                 <x-button link="{{ route('routines.completed') }}"
                 class="btn-primary mt-4" 
-                label="{{ __('View All') }}" 
+                label="{{ __('View all') }}" 
                 icon="o-arrow-right" />
             </x-slot:actions>
         </x-card>
