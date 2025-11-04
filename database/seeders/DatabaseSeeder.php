@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             TestimonySeeder::class,
             RoutineSeeder::class,
+            AchievementSeeder::class,
+            LevelSeeder::class,
         ]);
     }
 }

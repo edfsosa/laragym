@@ -401,8 +401,14 @@
     "Exercise log not found.": "Registro de ejercicio no encontrado.",
     "This exercise is already marked as completed.": "Este ejercicio ya está marcado como completado.",
     "This exercise has been skipped and cannot be marked as completed.": "Este ejercicio ha sido omitido y no puede ser marcado como completado.",
-    
-
+    "Body Metrics": "Métricas corporales",
+    "Measurement date": "Fecha de medición",
+    "Weight": "Peso",
+    "Height": "Altura",
+    "BMI": "IMC",
+    "Achievements": "Logros",
+    "Achievement": "Logro",
+    "Unlocked at": "Desbloqueado en",
 
     "Social media links": "Enlaces de redes sociales",
     "Instagram URL": "URL de Instagram",

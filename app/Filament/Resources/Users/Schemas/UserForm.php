@@ -69,6 +69,12 @@ class UserForm
                             ->disk('public')
                             ->directory('avatars')
                             ->maxSize(2048),
+                        TextInput::make('document_number')
+                            ->label(__('Document number'))
+                            ->integer()
+                            ->minValue(1)
+                            ->maxLength(30)
+                            ->step(1),
                         DatePicker::make('birth_date')
                             ->label(__('Birth Date'))
                             ->displayFormat('d/m/Y')
@@ -76,26 +82,19 @@ class UserForm
                             ->native(false)
                             ->minDate(now()->subYears(100))
                             ->maxDate(now()->subYears(15)),
+                        TextInput::make('phone')
+                            ->label(__('Phone'))
+                            ->tel()
+                            ->maxLength(20),
                         Radio::make('gender')
                             ->label(__('Gender'))
                             ->options([
                                 'male' => __('Male'),
                                 'female' => __('Female')
-                            ])
-                            ->inline(),
-                        TextInput::make('document_number')
-                            ->label(__('Document number'))
-                            ->integer()
-                            ->minValue(1)
-                            ->maxLength(30)
-                            ->step(1),
-                        TextInput::make('phone')
-                            ->label(__('Phone'))
-                            ->tel()
-                            ->maxLength(20),
+                            ]),
                     ])
                     ->columnSpanFull()
-                    ->columns(3)
+                    ->columns(5)
                     ->visibleOn('edit'),
 
                 Section::make(__('Address information'))
@@ -120,44 +119,6 @@ class UserForm
                     ->columnSpanFull()
                     ->columns(3)
                     ->visibleOn('edit'),
-
-                /* Section::make(__('Memberships information'))
-                    ->schema([
-                        Repeater::make('memberships')
-                            ->relationship()
-                            ->schema([
-                                Select::make('membership_id')
-                                    ->label(__('Membership'))
-                                    ->relationship('membership', 'name')
-                                    ->searchable()
-                                    ->preload()
-                                    ->native(false)
-                                    ->required(),
-                                DatePicker::make('start_at')
-                                    ->label(__('Start at'))
-                                    ->displayFormat('d/m/Y')
-                                    ->native(false)
-                                    ->closeOnDateSelection()
-                                    ->default(now())
-                                    ->required(),
-                                Select::make('status')
-                                    ->label(__('Status'))
-                                    ->options([
-                                        'active' => __('Active'),
-                                        'expired' => __('Expired'),
-                                        'canceled' => __('Canceled'),
-                                    ])
-                                    ->native(false)
-                                    ->visibleOn('edit')
-                                    ->required(),
-                            ])
-                            ->addActionLabel(__('Add'))
-                            ->collapsible()
-                            ->columns(3)
-                    ])
-                    ->columnSpanFull()
-                    ->visibleOn('edit')
-                    ->visible(fn(?User $record) => $record?->hasRole('Member')), */
             ]);
     }
 }

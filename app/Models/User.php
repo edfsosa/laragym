@@ -25,6 +25,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'status',
+        'xp',
     ];
 
     /**
@@ -47,6 +48,8 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'status' => 'boolean',
+            'xp' => 'integer',
         ];
     }
 
@@ -135,5 +138,32 @@ class User extends Authenticatable implements FilamentUser
     public function assignedRoutines()
     {
         return $this->hasMany(UserRoutine::class, 'assigned_by');
+    }
+
+    public function bodyMetrics()
+    {
+        return $this->hasMany(BodyMetric::class);
+    }
+
+    public function latestBodyMetric()
+    {
+        return $this->hasOne(BodyMetric::class)->latestOfMany('measurement_date');
+    }
+
+    public function userAchievements()
+    {
+        return $this->hasMany(UserAchievement::class);
+    }
+
+    public function achievements()
+    {
+        return $this->belongsToMany(Achievement::class, 'user_achievements')
+            ->withPivot('unlocked_at')
+            ->withTimestamps();
+    }
+
+    public function getLevelAttribute()
+    {
+        return Level::getLevelByXp($this->xp);
     }
 }

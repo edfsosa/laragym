@@ -2,13 +2,18 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class UsersTable
 {
@@ -39,19 +44,6 @@ class UsersTable
                     ->sortable(),
                 TextColumn::make('status')
                     ->label(__('Status'))
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'active' => 'success',
-                        'inactive' => 'danger',
-                        'suspended' => 'warning',
-                        default => 'secondary',
-                    })
-                    ->formatStateUsing(fn(string $state): string => match ($state) {
-                        'active' => __('Active'),
-                        'inactive' => __('Inactive'),
-                        'suspended' => __('Suspended'),
-                        default => __('Unknown'),
-                    })
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->label(__('Created at'))
@@ -77,6 +69,29 @@ class UsersTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('reset-password')
+                    ->label(__('Reset Password'))
+                    ->icon('heroicon-o-key')
+                    ->color('warning')
+                    ->requiresConfirmation()
+                    ->action(function (User $record) {
+                        $newPassword = Str::random(10);
+
+                        $record->update([
+                            'password' => Hash::make($newPassword),
+                        ]);
+
+                        Notification::make()
+                            ->title(__('Password Reset Successful'))
+                            ->body(__('The new password is:') . ' <code>' . $newPassword . '</code>')
+                            ->persistent()
+                            ->success()
+                            ->send();
+                    })
+                    ->modalHeading(__('Are you sure?'))
+                    ->modalDescription(__('This action will reset the user\'s password and notify you with the new password.'))
+                    ->modalSubmitActionLabel(__('Reset'))
+                    ->visible(fn($record) => $record->hasRole(['Member', 'Trainer'])),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

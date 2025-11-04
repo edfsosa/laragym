@@ -39,6 +39,9 @@ class UserResource extends Resource
     {
         return [
             RelationManagers\UserRoutinesRelationManager::class,
+            RelationManagers\MembershipsRelationManager::class,
+            RelationManagers\BodyMetricsRelationManager::class,
+            RelationManagers\UserAchievementsRelationManager::class,
         ];
     }
 
