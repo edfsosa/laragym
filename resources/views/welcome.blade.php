@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
+    <title>{{ $settings->business_name }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         @keyframes fadeInUp {
@@ -109,7 +109,7 @@
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
                     <div class="logo-text">
-                        <span class="smart-white">SMART</span><span class="gym-purple">GYM</span>
+                        {{ $settings->business_name }}
                     </div>
                 </div>
                 <!-- Navigation Links -->
@@ -131,11 +131,11 @@
                             Iniciar
                             Sesión</button>
                     </a>
-                    <a href="/contact-form">
+                    <a href="{{ $settings->hero_cta_link }}">
                         <button
                             class="px-6 py-2 purple-gradient text-white rounded-lg font-bold hover:opacity-90 transition transform hover:scale-105">
-                            Únete
-                            Ahora</button>
+                            {{ $settings->hero_cta_text }}
+                        </button>
                     </a>
                 </div>
             </div>
@@ -156,32 +156,32 @@
                 <div class="text-white animate-fade-in-up">
                     <!-- Main Heading -->
                     <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
-                        Alcanzá tus <span class="gym-purple">metas</span>
+                        {{ $settings->hero_title }}
                     </h1>
                     <!-- Subheading -->
                     <p class="text-xl mb-8 text-gray-300 leading-relaxed">
-                        Te ofrecemos las mejores instalaciones y entrenadores para lograr tus objetivos fitness.
+                        {{ $settings->hero_subtitle }}
                     </p>
                     <!-- Join Now Button -->
-                    <a href="/contact-form">
+                    <a href="{{ $settings->hero_cta_link }}">
                         <button
                             class="px-8 py-4 purple-gradient text-white rounded-xl font-black text-xl hover:opacity-90 transition transform hover:scale-105">
-                            Únete
-                            Ahora</button>
+                            {{ $settings->hero_cta_text }}
+                        </button>
                     </a>
                     <!-- Stats -->
                     <div class="mt-10 grid grid-cols-3 gap-6">
                         <div class="text-center">
-                            <p class="text-4xl font-black gym-purple">50+</p>
-                            <p class="text-gray-400 text-sm">Equipos Modernos</p>
+                            <p class="text-4xl font-black gym-purple">{{ $settings->stats_members }}+</p>
+                            <p class="text-gray-400 text-sm">Miembros Activos</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-4xl font-black gym-purple">10+</p>
+                            <p class="text-4xl font-black gym-purple">{{ $settings->stats_trainers }}+</p>
                             <p class="text-gray-400 text-sm">Entrenadores Pro</p>
                         </div>
                         <div class="text-center">
-                            <p class="text-4xl font-black gym-purple">24/7</p>
-                            <p class="text-gray-400 text-sm">Abierto</p>
+                            <p class="text-4xl font-black gym-purple">{{ $settings->stats_classes }}+</p>
+                            <p class="text-gray-400 text-sm">Clases Semanales</p>
                         </div>
                     </div>
                 </div>
@@ -391,7 +391,7 @@
                 </div>
                 <div>
                     <p class="text-purple-400 font-bold mb-2">⏰ Horarios</p>
-                    <p class="text-white text-lg">Lunes a Domingo 24/7</p>
+                    <p class="text-white text-lg">{{ $settings->business_hours }}</p>
                 </div>
             </div>
         </div>
@@ -445,7 +445,7 @@
                         </li>
                         <li class="flex items-start">
                             <span class="text-purple-500 mr-2">⏰</span>
-                            <span>Abierto 24/7</span>
+                            <span>{{ $settings->business_hours }} </span>
                         </li>
                     </ul>
                 </div>

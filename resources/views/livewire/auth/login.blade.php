@@ -11,9 +11,15 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Features;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
 use Livewire\Volt\Component;
 
-new #[Layout('components.layouts.auth')] class extends Component {
+
+
+new 
+#[Layout('components.layouts.auth')] 
+#[Title('Log In')]
+class extends Component {
     #[Validate('required|string|email')]
     public string $email = '';
 
