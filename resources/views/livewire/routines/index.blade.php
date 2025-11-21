@@ -1,21 +1,47 @@
 <?php
 
 use App\Models\UserRoutine;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
+use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 
 new #[Title('Routines')] class extends Component {
     use Toast;
+    use WithPagination;
+
+    public bool $hasAssignedRoutines = false;
+
+    /**
+     * Inicializa el componente.
+     */
+    public function mount(): void
+    {
+        $this->hasAssignedRoutines = UserRoutine::where('user_id', auth()->id())
+            ->where('status', 'assigned')
+            ->exists();
+    }
+
+    #[Url]
+    public string $search = '';
 
     public bool $showCancelRoutineModal = false;
     public ?UserRoutine $selectedRoutine = null;
 
     /**
+     * Limpia los filtros de búsqueda.
+     */
+    public function clear(): void
+    {
+        $this->reset();
+    }
+
+    /**
      * Rutinas asignadas al usuario autenticado.
      */
-    public function routines(): Collection
+    public function routines(): LengthAwarePaginator
     {
         return UserRoutine::query()
             ->with(['user', 'routine', 'assignedBy'])
@@ -23,7 +49,12 @@ new #[Title('Routines')] class extends Component {
             ->where('user_id', auth()->id())
             ->where('status', 'assigned')
             ->orderBy('assigned_at', 'desc')
-            ->get();
+            ->when($this->search, function ($query) {
+                $query->whereHas('routine', function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')->orWhere('description', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->paginate(6);
     }
 
     /**
@@ -94,13 +125,22 @@ new #[Title('Routines')] class extends Component {
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
     {{-- ACTIONS --}}
-    <div class="flex items-center justify-start mb-6 space-x-2">
-        <x-routines.new-routine-button />
-        <x-routines.history-button />
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <div class="flex items-center gap-2">
+            <x-routines.new-routine-button />
+            <x-routines.history-button />
+        </div>
+        <x-routines.search-input wire:model.live.debounce="search" />
     </div>
 
     <!-- ROUTINES LIST -->
-    <x-routines.assigned-list :routines="$routines" />
+    @if (!$hasAssignedRoutines)
+        <x-alert title="{{ __('No Routines Assigned') }}"
+            description="{{ __('You have no routines assigned. Please assign a routine to get started.') }}"
+            icon="o-information-circle" class="mb-6" />
+    @else
+        <x-routines.assigned-list :routines="$routines" />
+    @endif
 
     <!-- CANCEL ROUTINE MODAL -->
     <x-routines.cancel-modal />

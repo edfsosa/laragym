@@ -1,5 +1,5 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @foreach ($routines as $routine)
+    @forelse ($routines as $routine)
         <x-card title="{{ $routine->name }}" shadow>
             <div>
                 <div class="mb-4">
@@ -46,5 +46,15 @@
                     wire:click="viewExercises({{ $routine->id }})" spinner />
             </x-slot:actions>
         </x-card>
-    @endforeach
+    @empty
+        {{-- NO RESULTS --}}
+        <x-alert title="{{ __('No routines found') }}"
+            description="{{ __('Try adjusting your search or filter to find what you are looking for.') }}"
+            icon="o-exclamation-triangle" class="col-span-full">
+            <x-slot:actions>
+                <x-button label="{{ __('Clear Search') }}" wire:click="clear" icon="o-x-mark" class="btn-primary"
+                    spinner />
+            </x-slot:actions>
+        </x-alert>
+    @endforelse
 </div>

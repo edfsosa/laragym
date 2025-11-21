@@ -31,8 +31,14 @@
             </x-slot:actions>
         </x-card>
     @empty
-        <x-alert title="{{ __('No assigned routines') }}"
-            description="{{ __('You have no assigned routines at the moment. Please check back later or contact your trainer.') }}"
-            icon="o-information-circle" class="col-span-full" />
+        {{-- NO RESULTS --}}
+        <x-alert title="{{ __('No routines found') }}"
+            description="{{ __('Try adjusting your search or filter to find what you are looking for.') }}"
+            icon="o-exclamation-triangle" class="col-span-full">
+            <x-slot:actions>
+                <x-button label="{{ __('Clear Search') }}" wire:click="clear" icon="o-x-mark" class="btn-primary"
+                    spinner />
+            </x-slot:actions>
+        </x-alert>
     @endforelse
 </div>

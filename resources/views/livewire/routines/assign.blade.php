@@ -7,22 +7,40 @@ use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 
-new #[Title('Asignar Rutina')]
-class extends Component {
+new #[Title('Asignar Rutina')] class extends Component {
     use Toast;
     use WithPagination;
+
+    #[Url]
+    public string $search = '';
 
     public bool $showExercisesModal = false;
     public $selectedRoutine = null;
     public $exercises = [];
 
     /**
+     * Limpia los filtros de búsqueda.
+     */
+    public function clear(): void
+    {
+        $this->reset();
+    }
+
+    /**
      * Lista de rutinas disponibles para asignar.
      */
     public function routines(): LengthAwarePaginator
     {
-        return Routine::query()->with('routineExercises')->orderBy('created_at', 'desc')->paginate(6);
+        return Routine::query()
+        ->with('routineExercises')
+        ->when($this->search, function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%')
+                  ->orWhere('description', 'like', '%' . $this->search . '%');
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(6);
     }
 
     /**
@@ -110,12 +128,14 @@ class extends Component {
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
     {{-- ACTIONS --}}
-    <div class="flex items-center justify-start mb-6 space-x-2">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <x-routines.go-back-button />
+        <x-routines.search-input wire:model.live.debounce="search" />
     </div>
 
     {{-- ROUTINES LIST --}}
-    <x-routines.list :routines="$routines" :assignable="true" wire:click:viewExercises="viewExercises" wire:click:assignRoutine="assignRoutine" />
+    <x-routines.list :routines="$routines" :assignable="true" wire:click:viewExercises="viewExercises"
+        wire:click:assignRoutine="assignRoutine" />
 
     {{-- PAGINATION --}}
     <div class="mt-6">
