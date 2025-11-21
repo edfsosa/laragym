@@ -19,36 +19,57 @@ class UserMembership extends Model
         'end_at' => 'date',
     ];
 
+    /**
+     * Obtener el usuario asociado a esta membresía de usuario.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Obtener la membresía asociada a esta membresía de usuario.
+     */
     public function membership()
     {
         return $this->belongsTo(Membership::class);
     }
 
+    /**
+     * Obtener el nombre del usuario asociado.
+     */
     public function getUserNameAttribute()
     {
         return $this->user ? $this->user->name : null;
     }
 
+    /**
+     * Obtener el nombre de la membresía asociada.
+     */
     public function getMembershipNameAttribute()
     {
         return $this->membership ? $this->membership->name : null;
     }
 
+    /**
+     * Obtener la descripción de la membresía asociada.
+     */
     public function getMembershipDescriptionAttribute()
     {
         return $this->membership ? $this->membership->description : null;
     }
 
-    public function getMembershipPriceAttribute() // en formato guaranies paraguayos
+    /**
+     * Obtener el precio de la membresía asociada en formato guaraníes paraguayos.
+     */
+    public function getMembershipPriceAttribute()
     {
-        return $this->membership ? number_format($this->membership->price, 0, ',', '.') . ' Gs.' : null;
+        return $this->membership ? 'Gs. ' . number_format($this->membership->price, 0, ',', '.') : null;
     }
 
+    /**
+     * Obtener las fechas de inicio y fin en formato 'd/m/Y'.
+     */
     public function getStartAtFormattedAttribute()
     {
         return $this->start_at ? $this->start_at->format('d/m/Y') : null;
@@ -59,11 +80,17 @@ class UserMembership extends Model
         return $this->end_at ? $this->end_at->format('d/m/Y') : null;
     }
 
+    /**
+     * Obtener los pagos asociados a esta membresía de usuario.
+     */
     public function payments()
     {
         return $this->hasMany(Payment::class, 'user_membership_id');
     }
 
+    /**
+     * Obtener la etiqueta de estado legible.
+     */
     public function getStatusLabelAttribute()
     {
         switch ($this->status) {
@@ -76,5 +103,20 @@ class UserMembership extends Model
             default:
                 return __('Unknown');
         }
+    }
+
+    /**
+     * Verificar si la membresía está por vencer en los próximos 7 días.
+     */
+    public function isExpiringSoon(): bool
+    {
+        if (!$this->end_at) {
+            return false;
+        }
+
+        $now = now();
+        $daysUntilEnd = $now->diffInDays($this->end_at, false);
+
+        return $daysUntilEnd >= 0 && $daysUntilEnd <= 7;
     }
 }
