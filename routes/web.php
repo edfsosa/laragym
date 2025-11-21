@@ -18,6 +18,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('/routines/{routine}/show', 'routines.show')->name('routines.show');
     Volt::route('/routines/completed', 'routines.completed.index')->name('routines.completed');
     Volt::route('/routines/completed/{routine}/show', 'routines.completed.show')->name('routines.completed.show');
+    Volt::route('/routines/history', 'routines.history')->name('routines.history');
+    Volt::route('/routines/assign', 'routines.assign')->name('routines.assign');
 
     // Rutas de dashboard y perfil
     Volt::route('/dashboard', 'dashboard')->name('dashboard');
