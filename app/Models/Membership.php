@@ -20,13 +20,27 @@ class Membership extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Obtener las membresías de usuario asociadas a esta membresía.
+     */
     public function userMemberships()
     {
         return $this->hasMany(UserMembership::class);
     }
 
-    public function getPriceFormatAttribute() // precio en guaranies paraguayos
+    /**
+     * Obtener el precio formateado de la membresía en guaraníes.
+     */
+    public function getPriceFormattedAttribute()
     {
-        return '₲ ' . number_format($this->price, 0, ',', '.');
+        return 'Gs. ' . number_format($this->price, 0, ',', '.');
+    }
+
+    /**
+     * Obtener la duración formateada de la membresía en días.
+     */
+    public function getDurationDaysFormattedAttribute()
+    {
+        return $this->duration_days . ' días';
     }
 }

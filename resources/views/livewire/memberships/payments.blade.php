@@ -3,21 +3,48 @@
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\UserMembership;
 use App\Models\Payment;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
+use Livewire\WithPagination;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-new #[Title('Payments')] class extends Component {
+new #[Title('Pagos de Membresía')] class extends Component {
     use Toast;
+    use WithPagination;
+
+    #[Url]
+    public string $search = '';
 
     public UserMembership $membership;
 
-    public function payments(): Collection
+    /**
+     * Limpia los filtros de búsqueda.
+     */
+    public function clear(): void
     {
-        return $this->membership->payments()->latest()->get();
+        $this->search = '';
+    }
+
+    /**
+     * Lista de pagos (status paid) de la membresía.
+     */
+    public function payments(): LengthAwarePaginator
+    {
+        return Payment::query()
+            ->where('user_membership_id', $this->membership->id)
+            ->where('status', 'paid')
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('method', 'like', '%' . $this->search . '%')
+                      ->orWhere('amount', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->orderBy('paid_at', 'desc')
+            ->paginate(10);
     }
 
     public function downloadReceipt(int $id): StreamedResponse
@@ -41,8 +68,13 @@ new #[Title('Payments')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="{{ __('Payments for') }} {{ $membership->membership_name }}"
-    separator progress-indicator />
+    <x-header title="{{ __('Payments for') }} {{ $membership->membership_name }}" separator progress-indicator />
+
+    {{-- ACTIONS --}}
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <x-button label="{{ __('Export') }}" icon="o-share" class="btn-primary" link="#" />
+        <x-input placeholder="Search ..." wire:model.live.debounce="search" icon="o-magnifying-glass" />
+    </div>
 
     @php
         $breadcrumbs = [
@@ -55,8 +87,11 @@ new #[Title('Payments')] class extends Component {
                 'link' => '/memberships',
             ],
             [
+                'label' => $membership->membership_name,
+                'link' => route('memberships.show', $membership),
+            ],
+            [
                 'label' => __('Payments'),
-                'link' => '#',
             ],
         ];
     @endphp
@@ -64,34 +99,12 @@ new #[Title('Payments')] class extends Component {
     <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
+    <!-- LISTA DE PAGOS -->
     <x-card shadow>
         @forelse($payments as $payment)
-            <x-list-item :item="$payment">
-                <x-slot:avatar>
-                    <x-badge value="{{ $payment->status_label }}" class="badge-primary" />
-                </x-slot:avatar>
-                <x-slot:value>
-                    {{ $payment->method_label }}
-                </x-slot:value>
-                <x-slot:sub-value>
-                    <div>
-                        <p>
-                            {{ $payment->amount_formatted }}
-                        </p>
-                        @if ($payment->paid_at)
-                            <p>
-                                {{ $payment->paid_at_formatted }}
-                            </p>
-                        @endif
-                    </div>
-                </x-slot:sub-value>
-                <x-slot:actions>
-                    <x-button icon="o-arrow-down" class="btn-sm" wire:click="downloadReceipt({{ $payment->id }})"
-                        wire:loading.attr="disabled" spinner />
-                </x-slot:actions>
-            </x-list-item>
+            <x-memberships.payment-list-item :payment="$payment" />
         @empty
-            <p>{{ __('No payments found for this membership.') }}</p>
+            <x-alerts.no-results />
         @endforelse
     </x-card>
 </div>

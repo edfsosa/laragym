@@ -6,7 +6,8 @@ use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 use Livewire\Attributes\Title;
 
-new #[Title('Memberships')] class extends Component {
+new #[Title('Membresías')]
+class extends Component {
     use Toast;
 
     public function activeMembership(): ?UserMembership
@@ -48,7 +49,6 @@ new #[Title('Memberships')] class extends Component {
             ],
             [
                 'label' => __('Memberships'),
-                'link' => '/memberships',
             ],
         ];
     @endphp

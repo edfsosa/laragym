@@ -435,10 +435,15 @@
     "Routine Completed": "Rutina Completada",
     "Congratulations! You have completed all exercises in this routine.": "¡Felicidades! Has completado todos los ejercicios en esta rutina.",
     "Routine canceled successfully.": "Rutina cancelada con éxito.",
+    "No results found": "No se encontraron resultados",
     "Try adjusting your search or filter to find what you are looking for.": "Intenta ajustar tu búsqueda o filtro para encontrar lo que estás buscando.",
     "Clear Search": "Borrar búsqueda",
     "No Routines Assigned": "No hay Rutinas Asignadas",
     "You have no routines assigned. Please assign a routine to get started.": "No tienes rutinas asignadas. Por favor, asigna una rutina para comenzar.",
+
+    "You have successfully joined the membership: :name": "Te has unido con éxito a la membresía: :name",
+    "Join Now": "Únete ahora",
+    "Membership Details": "Detalles de la Membresía",
 
     "Social media links": "Enlaces de redes sociales",
     "Instagram URL": "URL de Instagram",

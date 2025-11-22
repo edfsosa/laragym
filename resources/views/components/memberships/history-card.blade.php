@@ -5,7 +5,8 @@
                 <x-badge value="{{ $membership->status_label }}" class="badge-error" />
             </x-slot:avatar>
             <x-slot:actions>
-                <x-button label="{{ __('View') }}" icon="o-eye" link="#" class="btn-primary" />
+                <x-button label="{{ __('View') }}" icon="o-eye" link="{{ route('memberships.show', $membership) }}"
+                class="btn-primary" />
             </x-slot:actions>
         </x-list-item>
     @empty
