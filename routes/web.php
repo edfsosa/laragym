@@ -24,7 +24,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de dashboard y perfil
     Volt::route('/dashboard', 'dashboard')->name('dashboard');
-    Volt::route('/profile', 'profile')->name('profile');
+    Volt::route('/profile', 'profile.profile')->name('profile.view');
+    Volt::route('/profile/edit', 'profile.edit')->name('profile.edit');
+
+    // Rutas de Body Metrics
+    Volt::route('/body-metrics/create', 'body-metrics.create')->name('body-metrics.create');
 });
 
 require __DIR__ . '/auth.php';

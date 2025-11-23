@@ -153,8 +153,10 @@ new #[Title('Routine Details')] class extends Component {
     {{-- ACTIONS --}}
     <div class="flex items-center justify-start mb-6 space-x-2">
         <x-routines.go-back-button />
-        <x-button label="{{ __('Cancel') }}" icon="o-x-mark" class="btn-danger"
-            wire:click="confirmCancelRoutine({{ $routine->id }})" spinner />
+        @if ($routine->status === 'assigned')
+            <x-button label="{{ __('Cancel') }}" icon="o-x-mark" class="btn-danger"
+                wire:click="confirmCancelRoutine({{ $routine->id }})" spinner />
+        @endif
     </div>
 
     {{--  CARD  --}}
@@ -164,7 +166,7 @@ new #[Title('Routine Details')] class extends Component {
         <x-card shadow>
             <div class="p-6">
                 <h2 class="text-xl font-semibold mb-4">{{ __('Routine Completed') }}</h2>
-                <p>{{ __('You have already completed this routine on') }} {{ $routine->completed_at_formatted }}.</p>
+                <p>{{ __('You have already completed this routine') }} {{ $routine->completed_at_formatted }}.</p>
             </div>
         </x-card>
     @elseif ($routine->status === 'cancelled')

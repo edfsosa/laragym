@@ -15,18 +15,27 @@ class Address extends Model
         'reference',
     ];
 
+    /**
+     * Relación con el modelo User, indicando que cada dirección pertenece a un usuario.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relación con el modelo City, indicando que cada dirección pertenece a una ciudad.
+     */
     public function city()
     {
         return $this->belongsTo(City::class);
     }
 
-    public function department()
+    /**
+     * Accesor para obtener el departamento asociado a la ciudad de la dirección.
+     */
+    public function getDepartmentAttribute()
     {
-        return $this->city->department();
+        return $this->city?->department;
     }
 }

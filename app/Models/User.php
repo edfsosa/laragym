@@ -90,7 +90,11 @@ class User extends Authenticatable implements FilamentUser
      */
     public function getAvatarUrlAttribute(): string
     {
-        return $this->personalData ? $this->personalData->avatar : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
+        if (! $this->personalData?->avatar) {
+            return "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
+        }
+
+        return asset('storage/' . $this->personalData->avatar);
     }
 
     /**
@@ -110,11 +114,32 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * Obtener la fecha de nacimiento del usuario en formato dd/mm/yyyy
+     * Obtener el género del usuario traducido
      */
-    public function getBirthDateAttribute(): ?string // dd/mm/yyyy
+    public function getGenderTranslatedAttribute(): ?string
     {
-        return $this->personalData && $this->personalData->birth_date ? $this->personalData->birth_date->format('d/m/Y') : null;
+        if (!$this->personalData) {
+            return null;
+        }
+
+        switch ($this->personalData->gender) {
+            case 'male':
+                return __('Masculino');
+            case 'female':
+                return __('Femenino');
+            default:
+                return $this->personalData->gender;
+        }
+    }
+
+    /**
+     * Obtener la fecha de nacimiento del usuario en formato dd/mm/aaaa
+     */
+    public function getBirthDateAttribute(): ?string
+    {
+        return $this->personalData && $this->personalData->birth_date
+            ? $this->personalData->birth_date->format('d/m/Y')
+            : null;
     }
 
     /**
@@ -162,11 +187,10 @@ class User extends Authenticatable implements FilamentUser
      */
     public function getFullAddressAttribute(): ?string
     {
-        if (!$this->address && !$this->address->city) {
+        if (!$this->address) {
             return null;
-        } else {
-            return "{$this->address->street} N° {$this->address->number}, {$this->address->city->name}";
         }
+        return "{$this->address->street} N° {$this->address->number}, {$this->address->city?->name}";
     }
 
     /**
@@ -225,5 +249,36 @@ class User extends Authenticatable implements FilamentUser
     public function getLevelAttribute()
     {
         return Level::getLevelByXp($this->xp);
+    }
+
+    /**
+     * Obtener el estado del usuario traducido
+     */
+    public function getStatusTranslatedAttribute(): string
+    {
+        switch ($this->status) {
+            case 'active':
+                return __('Activo');
+            case 'inactive':
+                return __('Inactivo');
+            case 'suspended':
+                return __('Suspendido');
+            default:
+                return $this->status;
+        }
+    }
+
+    public function getStatusBadgeClassAttribute(): string
+    {
+        switch ($this->status) {
+            case 'active':
+                return 'badge-success';
+            case 'inactive':
+                return 'badge-error';
+            case 'suspended':
+                return 'badge-warning';
+            default:
+                return 'badge-primary';
+        }
     }
 }
