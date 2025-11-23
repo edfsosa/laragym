@@ -35,7 +35,7 @@ new #[Title('Routines')] class extends Component {
      */
     public function clear(): void
     {
-        $this->reset();
+        $this->search = '';
     }
 
     /**
@@ -108,32 +108,37 @@ new #[Title('Routines')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="{{ __('Routines') }}" separator />
+    <x-header title="{{ __('Routines') }}" separator>
+        <x-slot:actions>
+            <x-button label="{{ __('New Routine') }}" icon="o-plus" class="btn-primary"
+                link="{{ route('routines.assign') }}" />
+            <x-button label="{{ __('History') }}" icon="o-clock" class="btn-primary"
+                link="{{ route('routines.history') }}" />
+        </x-slot:actions>
+    </x-header>
 
     @php
         $breadcrumbs = [
             [
                 'label' => __('Dashboard'),
                 'link' => '/dashboard',
+                'icon' => 'o-home',
             ],
             [
                 'label' => __('Routines'),
+                'link' => '/routines',
+                'icon' => 'o-clipboard-document-list',
             ],
         ];
     @endphp
+    
     <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
-    {{-- ACTIONS --}}
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <div class="flex items-center gap-2">
-            <x-routines.new-routine-button />
-            <x-routines.history-button />
-        </div>
-        <x-routines.search-input wire:model.live.debounce="search" />
-    </div>
+    <!-- SEARCH -->
+    <x-input placeholder="Search ..." wire:model.live.debounce="search" icon="o-magnifying-glass" />
 
-    <!-- ROUTINES LIST -->
+    <!-- ASSIGNED ROUTINES LIST -->
     @if (!$hasAssignedRoutines)
         <x-alert title="{{ __('No Routines Assigned') }}"
             description="{{ __('You have no routines assigned. Please assign a routine to get started.') }}"

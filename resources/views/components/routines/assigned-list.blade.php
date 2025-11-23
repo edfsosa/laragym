@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
     @forelse ($routines as $routine)
         <x-card title="{{ $routine->routine_name }}" shadow>
             <div>
@@ -24,8 +24,8 @@
             </x-slot:menu>
 
             <x-slot:actions separator>
-                <x-button label="{{ $routine->progress_percentage > 0 ? __('Continue') : __('Start') }}" icon="o-play"
-                    class="btn-primary" link="{{ route('routines.show', $routine) }}" spinner />
+                <x-button label="{{ __('View') }}" link="{{ route('routines.show', $routine) }}"
+                    icon="o-eye" class="btn-primary" spinner />
                 <x-button label="{{ __('Cancel') }}" icon="o-x-mark" class="btn-danger"
                     wire:click="confirmCancelRoutine({{ $routine->id }})" spinner />
             </x-slot:actions>

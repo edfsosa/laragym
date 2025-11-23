@@ -152,7 +152,6 @@ new #[Title('Routine Details')] class extends Component {
 
     {{-- ACTIONS --}}
     <div class="flex items-center justify-start mb-6 space-x-2">
-        <x-routines.go-back-button />
         @if ($routine->status === 'assigned')
             <x-button label="{{ __('Cancel') }}" icon="o-x-mark" class="btn-danger"
                 wire:click="confirmCancelRoutine({{ $routine->id }})" spinner />

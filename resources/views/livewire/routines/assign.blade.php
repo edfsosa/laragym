@@ -34,13 +34,12 @@ new #[Title('Asignar Rutina')] class extends Component {
     public function routines(): LengthAwarePaginator
     {
         return Routine::query()
-        ->with('routineExercises')
-        ->when($this->search, function ($query) {
-            $query->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(6);
+            ->with('routineExercises')
+            ->when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')->orWhere('description', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(6);
     }
 
     /**
@@ -106,20 +105,27 @@ new #[Title('Asignar Rutina')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="{{ __('Assign Routine') }}" separator />
+    <x-header title="{{ __('Assign Routine') }}" separator>
+        <x-slot:actions>
+            <x-button link="/routines" label="{{ __('Cancel') }}" icon="o-x-mark" />
+        </x-slot:actions>
+    </x-header>
 
     @php
         $breadcrumbs = [
             [
                 'label' => __('Dashboard'),
                 'link' => '/dashboard',
+                'icon' => 'o-home',
             ],
             [
                 'label' => __('Routines'),
                 'link' => '/routines',
+                'icon' => 'o-clipboard-document-list',
             ],
             [
                 'label' => __('Assign'),
+                'icon' => 'o-plus-circle',
             ],
         ];
     @endphp
@@ -127,15 +133,70 @@ new #[Title('Asignar Rutina')] class extends Component {
     <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
-    {{-- ACTIONS --}}
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <x-routines.go-back-button />
-        <x-routines.search-input wire:model.live.debounce="search" />
-    </div>
+    <!-- SEARCH INPUT -->
+    <x-input placeholder="Search ..." wire:model.live.debounce="search" icon="o-magnifying-glass" />
 
     {{-- ROUTINES LIST --}}
-    <x-routines.list :routines="$routines" :assignable="true" wire:click:viewExercises="viewExercises"
-        wire:click:assignRoutine="assignRoutine" />
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        @forelse ($routines as $routine)
+            <x-card title="{{ $routine->name }}" shadow>
+                <div>
+                    <div class="mb-4">
+                        <span class="text-sm">
+                            {{ $routine->short_description }}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="font-medium">
+                                {{ __('Level') }}</span>
+                            <p>
+                                {{ $routine->level_translated }}
+                            </p>
+                        </div>
+                        <div>
+                            <span class="font-medium">
+                                {{ __('Duration') }}</span>
+                            <p>
+                                {{ $routine->duration_minutes }} {{ __('minutes') }}
+                            </p>
+                        </div>
+                        <div>
+                            <span class="font-medium">
+                                {{ __('Type') }}</span>
+                            <p>
+                                {{ $routine->type_translated }}
+                            </p>
+                        </div>
+                        <div>
+                            <span class="font-medium">
+                                {{ __('Muscle group') }}</span>
+                            <p>
+                                {{ $routine->muscle_group_translated }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <x-slot:actions separator>
+                    <x-button label="{{ __('Assign To Me') }}" icon="o-check" class="btn-primary"
+                        wire:click="assignRoutine({{ $routine->id }})" spinner />
+                    <x-button label="{{ __('View Exercises') }}" icon="o-list-bullet" class="btn-secondary"
+                        wire:click="viewExercises({{ $routine->id }})" spinner />
+                </x-slot:actions>
+            </x-card>
+        @empty
+            {{-- NO RESULTS --}}
+            <x-alert title="{{ __('No routines found') }}"
+                description="{{ __('Try adjusting your search or filter to find what you are looking for.') }}"
+                icon="o-exclamation-triangle" class="col-span-full">
+                <x-slot:actions>
+                    <x-button label="{{ __('Clear Search') }}" wire:click="clear" icon="o-x-mark" class="btn-primary"
+                        spinner />
+                </x-slot:actions>
+            </x-alert>
+        @endforelse
+    </div>
 
     {{-- PAGINATION --}}
     <div class="mt-6">
@@ -143,5 +204,24 @@ new #[Title('Asignar Rutina')] class extends Component {
     </div>
 
     {{-- EXERCISES MODAL --}}
-    <x-routines.exercises-modal :showExercisesModal="$showExercisesModal" :selectedRoutine="$selectedRoutine" :exercises="$exercises" />
+    <x-modal wire:model="showExercisesModal" title="{{ __('Exercises') }}" class="backdrop-blur">
+        @if ($selectedRoutine)
+            <ul class="space-y-3">
+                @foreach ($exercises as $exercise)
+                    <li class="border-b pb-2 flex justify-between">
+                        <span class="font-medium">{{ $exercise->exercise_name }}</span>
+                        <span class="text-sm">
+                            {{ $exercise->sets }} x {{ $exercise->reps }}
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+
+        <x-slot:actions>
+            <x-button label="{{ __('Close') }}" class="btn-secondary"
+                wire:click="$set('showExercisesModal', false)" />
+        </x-slot:actions>
+    </x-modal>
+
 </div>

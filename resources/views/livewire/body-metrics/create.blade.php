@@ -85,6 +85,24 @@ new #[Title('Add Body Metric')] class extends Component {
         </x-slot:actions>
     </x-header>
 
+    @php
+        $breadcrumbs = [
+            [
+                'label' => __('Dashboard'),
+                'link' => '/dashboard',
+                'icon' => 'o-home',
+            ],
+            [
+                'label' => __('Body Metrics'),
+                'link' => route('body-metrics.create'),
+                'icon' => 'o-heart',
+            ],
+        ];
+    @endphp
+
+    <!-- BREADCRUMBS -->
+    <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
+
     <div>
         <x-form wire:submit="save">
             <x-card title="{{ __('Measurement Information') }}" shadow>
