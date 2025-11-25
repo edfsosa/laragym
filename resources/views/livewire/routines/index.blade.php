@@ -142,7 +142,7 @@ new #[Title('Routines')] class extends Component {
     @if (!$hasAssignedRoutines)
         <x-alert title="{{ __('No Routines Assigned') }}"
             description="{{ __('You have no routines assigned. Please assign a routine to get started.') }}"
-            icon="o-information-circle" class="mb-6" />
+            icon="o-information-circle" class="mb-6 mt-6" />
     @else
         <x-routines.assigned-list :routines="$routines" />
     @endif

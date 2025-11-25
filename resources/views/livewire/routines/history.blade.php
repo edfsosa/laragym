@@ -38,30 +38,32 @@ new #[Title('Routines History')] class extends Component {
 
 <div>
     <!-- HEADER -->
-    <x-header title="{{ __('Routines History') }}" separator />
+    <x-header title="{{ __('Routines History') }}" separator>
+        <x-slot:actions>
+            <x-button link="/routines" label="{{ __('Cancel') }}" icon="o-x-mark" />
+        </x-slot:actions>
+    </x-header>
 
     @php
         $breadcrumbs = [
             [
                 'label' => __('Dashboard'),
                 'link' => '/dashboard',
+                'icon' => 'o-home',
             ],
             [
                 'label' => __('Routines'),
                 'link' => '/routines',
+                'icon' => 'o-clipboard-document-list',
             ],
             [
                 'label' => __('History'),
+                'icon' => 'o-clock',
             ],
         ];
     @endphp
     <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
-
-    {{-- ACTIONS --}}
-    <div class="flex items-center justify-start mb-6 space-x-2">
-        <x-routines.go-back-button />
-    </div>
 
     {{--  LIST  --}}
     <x-routines.history-table :routines="$routines" />
