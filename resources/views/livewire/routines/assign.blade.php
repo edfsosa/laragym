@@ -3,43 +3,66 @@
 use App\Models\UserRoutine;
 use App\Models\Routine;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 use Livewire\Volt\Component;
 use Mary\Traits\Toast;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Computed;
 
 new #[Title('Asignar Rutina')] class extends Component {
     use Toast;
     use WithPagination;
 
-    #[Url]
+    #[Url(as: 'q')]
     public string $search = '';
 
     public bool $showExercisesModal = false;
-    public $selectedRoutine = null;
-    public $exercises = [];
+    public ?int $selectedRoutineId = null;
 
     /**
      * Limpia los filtros de búsqueda.
      */
     public function clear(): void
     {
-        $this->reset();
+        $this->reset('search');
+        $this->resetPage();
+    }
+
+    /**
+     * Actualiza la búsqueda y resetea la paginación.
+     */
+    public function updatedSearch(): void
+    {
+        $this->resetPage();
     }
 
     /**
      * Lista de rutinas disponibles para asignar.
      */
+    #[Computed]
     public function routines(): LengthAwarePaginator
     {
         return Routine::query()
-            ->with('routineExercises')
-            ->when($this->search, function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')->orWhere('description', 'like', '%' . $this->search . '%');
-            })
-            ->orderBy('created_at', 'desc')
+            ->with(['routineExercises' => fn($q) => $q->orderBy('order')])
+            ->withCount('routineExercises')
+            ->when($this->search, fn($query, $search) => $query->where(fn($q) => $q->where('name', 'like', "%{$search}%")->orWhere('description', 'like', "%{$search}%")))
+            ->orderByDesc('created_at')
             ->paginate(6);
+    }
+
+    /**
+     * Rutina seleccionada para ver ejercicios.
+     */
+    #[Computed]
+    public function selectedRoutine(): ?Routine
+    {
+        if (!$this->selectedRoutineId) {
+            return null;
+        }
+
+        return Routine::with(['routineExercises' => fn($q) => $q->orderBy('order')])->find($this->selectedRoutineId);
     }
 
     /**
@@ -47,32 +70,37 @@ new #[Title('Asignar Rutina')] class extends Component {
      */
     public function assignRoutine(int $routineId): void
     {
-        $routine = Routine::find($routineId);
+        try {
+            $routine = Routine::findOrFail($routineId);
+            $user = auth()->user();
 
-        if (!$routine) {
+            // Verificar si ya está asignada
+            if ($this->isRoutineAlreadyAssigned($user->id, $routineId)) {
+                $this->warning(__('You have already been assigned this routine.'));
+                return;
+            }
+
+            // Crear asignación en una transacción
+            DB::transaction(function () use ($user, $routineId) {
+                UserRoutine::create([
+                    'user_id' => $user->id,
+                    'routine_id' => $routineId,
+                    'assigned_by' => $user->id,
+                    'assigned_at' => now(),
+                    'status' => 'assigned',
+                ]);
+            });
+
+            $this->success(__('Routine assigned successfully.'));
+
+            // Redirigir a la vista de rutinas asignadas
+            $this->redirect('/routines', navigate: true);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             $this->error(__('Routine not found.'));
-            return;
+        } catch (\Exception $e) {
+            $this->error(__('An error occurred while assigning the routine. Please try again.'));
+            report($e);
         }
-
-        $user = auth()->user();
-
-        // Evitar duplicados
-        $exists = UserRoutine::where('user_id', $user->id)->where('routine_id', $routineId)->where('status', 'assigned')->exists();
-        if ($exists) {
-            $this->error(__('You have already been assigned this routine.'));
-            return;
-        }
-
-        // Asignar la rutina al usuario
-        UserRoutine::create([
-            'user_id' => $user->id,
-            'routine_id' => $routineId,
-            'assigned_by' => $user->id,
-            'assigned_at' => now(),
-            'status' => 'assigned',
-        ]);
-
-        $this->success(__('Routine assigned successfully.'));
     }
 
     /**
@@ -80,16 +108,40 @@ new #[Title('Asignar Rutina')] class extends Component {
      */
     public function viewExercises(int $routineId): void
     {
-        $routine = Routine::with('routineExercises')->find($routineId);
+        $this->selectedRoutineId = $routineId;
 
-        if (!$routine) {
+        if (!$this->selectedRoutine) {
             $this->error(__('Routine not found.'));
             return;
         }
 
-        $this->selectedRoutine = $routine;
-        $this->exercises = $routine->routineExercises;
         $this->showExercisesModal = true;
+    }
+
+    /**
+     * Cierra el modal de ejercicios.
+     */
+    public function closeExercisesModal(): void
+    {
+        $this->showExercisesModal = false;
+        $this->selectedRoutineId = null;
+    }
+
+    /**
+     * Verifica si el usuario ya tiene asignada esta rutina.
+     */
+    private function isRoutineAlreadyAssigned(int $userId, int $routineId): bool
+    {
+        return UserRoutine::query()->where('user_id', $userId)->where('routine_id', $routineId)->where('status', 'assigned')->exists();
+    }
+
+    /**
+     * Asigna la rutina desde el modal de ejercicios.
+     */
+    public function assignRoutineFromModal(int $routineId): void
+    {
+        $this->assignRoutine($routineId);
+        $this->closeExercisesModal();
     }
 
     /**
@@ -98,16 +150,19 @@ new #[Title('Asignar Rutina')] class extends Component {
     public function with(): array
     {
         return [
-            'routines' => $this->routines(),
+            'routines' => $this->routines,
+            'selectedRoutine' => $this->selectedRoutine,
+            'hasSearch' => !empty($this->search),
         ];
     }
-}; ?>
+};
+?>
 
 <div>
     <!-- HEADER -->
     <x-header title="{{ __('Assign Routine') }}" separator>
         <x-slot:actions>
-            <x-button link="/routines" label="{{ __('Cancel') }}" icon="o-x-mark" />
+            <x-button link="/routines" label="{{ __('Back to Routines') }}" icon="o-arrow-left" class="btn-ghost" />
         </x-slot:actions>
     </x-header>
 
@@ -133,68 +188,94 @@ new #[Title('Asignar Rutina')] class extends Component {
     <!-- BREADCRUMBS -->
     <x-breadcrumbs :items="$breadcrumbs" class="mb-4" />
 
-    <!-- SEARCH INPUT -->
-    <x-input placeholder="Search ..." wire:model.live.debounce="search" icon="o-magnifying-glass" />
+    <!-- SEARCH BAR -->
+    <div class="flex gap-2 items-center">
+        <x-input placeholder="{{ __('Search routines...') }}" wire:model.live.debounce="search" icon="o-magnifying-glass"
+            class="flex-1" />
+        @if ($hasSearch)
+            <x-button icon="o-x-mark" wire:click="clear" class="btn-ghost" tooltip="{{ __('Clear search') }}" />
+        @endif
+    </div>
 
     {{-- ROUTINES LIST --}}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         @forelse ($routines as $routine)
-            <x-card title="{{ $routine->name }}" shadow>
-                <div>
-                    <div class="mb-4">
-                        <span class="text-sm">
-                            {{ $routine->short_description }}
-                        </span>
+            <x-card title="{{ $routine->name }}" subtitle="{{ $routine->short_description }}" shadow
+                class="h-full hover:shadow-lg transition-shadow duration-200">
+                {{-- Stats con diseño más visual --}}
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    {{-- Duración --}}
+                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <x-icon name="o-clock" class="w-5 h-5 mx-auto mb-1 text-primary" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Duration') }}</p>
+                        <p class="font-semibold text-sm">{{ $routine->duration_formatted }}</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                            <span class="font-medium">
-                                {{ __('Level') }}</span>
-                            <p>
-                                {{ $routine->level_translated }}
-                            </p>
-                        </div>
-                        <div>
-                            <span class="font-medium">
-                                {{ __('Duration') }}</span>
-                            <p>
-                                {{ $routine->duration_minutes }} {{ __('minutes') }}
-                            </p>
-                        </div>
-                        <div>
-                            <span class="font-medium">
-                                {{ __('Type') }}</span>
-                            <p>
-                                {{ $routine->type_translated }}
-                            </p>
-                        </div>
-                        <div>
-                            <span class="font-medium">
-                                {{ __('Muscle group') }}</span>
-                            <p>
-                                {{ $routine->muscle_group_translated }}
-                            </p>
-                        </div>
+
+                    {{-- Tipo --}}
+                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <x-icon name="o-fire" class="w-5 h-5 mx-auto mb-1 text-primary" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Type') }}</p>
+                        <p class="font-semibold text-sm truncate">{{ $routine->type_translated }}</p>
+                    </div>
+
+                    {{-- Ejercicios --}}
+                    <div class="text-center p-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <x-icon name="o-list-bullet" class="w-5 h-5 mx-auto mb-1 text-primary" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Exercises') }}</p>
+                        <p class="font-semibold text-sm">
+                            {{ $routine->routine_exercises_count ?? $routine->routineExercises->count() }}
+                        </p>
                     </div>
                 </div>
 
-                <x-slot:actions separator>
-                    <x-button label="{{ __('Assign To Me') }}" icon="o-check" class="btn-primary"
-                        wire:click="assignRoutine({{ $routine->id }})" spinner />
-                    <x-button label="{{ __('View Exercises') }}" icon="o-list-bullet" class="btn-secondary"
-                        wire:click="viewExercises({{ $routine->id }})" spinner />
+                {{-- Grupo muscular como tag --}}
+                <div class="mb-4">
+                    <div
+                        class="inline-flex items-center gap-1 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs">
+                        <x-icon name="o-heart" class="w-3 h-3" />
+                        {{ $routine->muscle_group_translated }}
+                    </div>
+                </div>
+
+                <x-slot:menu>
+                    <x-badge value="{{ $routine->level_translated }}" class="{{ $routine->level_badge }}" />
+                </x-slot:menu>
+
+                {{-- Acciones --}}
+                <x-slot:actions>
+                    <x-button label="{{ __('Assign') }}" icon="o-check" class="btn-primary"
+                        wire:click="assignRoutine({{ $routine->id }})"
+                        spinner="assignRoutine({{ $routine->id }})" />
+                    <x-button icon="o-eye" class="btn-ghost btn-circle"
+                        wire:click="viewExercises({{ $routine->id }})" spinner="viewExercises({{ $routine->id }})"
+                        :tooltip="__('View Exercises')" />
                 </x-slot:actions>
             </x-card>
         @empty
             {{-- NO RESULTS --}}
-            <x-alert title="{{ __('No routines found') }}"
-                description="{{ __('Try adjusting your search or filter to find what you are looking for.') }}"
-                icon="o-exclamation-triangle" class="col-span-full">
-                <x-slot:actions>
-                    <x-button label="{{ __('Clear Search') }}" wire:click="clear" icon="o-x-mark" class="btn-primary"
-                        spinner />
-                </x-slot:actions>
-            </x-alert>
+            <div class="col-span-full">
+                <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
+                    <!-- Icon -->
+                    <div
+                        class="w-16 h-16 rounded-full bg-base-200 dark:bg-base-300 flex items-center justify-center mb-4">
+                        <x-icon name="o-magnifying-glass" class="w-8 h-8 text-gray-400" />
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                        {{ __('No routines found') }}
+                    </h3>
+
+                    <!-- Description -->
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md">
+                        {{ __('Try adjusting your search or filter to find what you are looking for.') }}
+                    </p>
+
+                    <!-- Action -->
+                    <x-button label="{{ __('Clear Search') }}" wire:click="clear" icon="o-x-mark"
+                        class="btn-ghost btn-sm" spinner />
+                </div>
+            </div>
         @endforelse
     </div>
 
@@ -204,24 +285,78 @@ new #[Title('Asignar Rutina')] class extends Component {
     </div>
 
     {{-- EXERCISES MODAL --}}
-    <x-modal wire:model="showExercisesModal" title="{{ __('Exercises') }}" class="backdrop-blur">
+    <x-modal wire:model="showExercisesModal" title="{{ $selectedRoutine?->name }} - {{ __('Exercises') }}"
+        class="backdrop-blur" separator>
         @if ($selectedRoutine)
-            <ul class="space-y-3">
-                @foreach ($exercises as $exercise)
-                    <li class="border-b pb-2 flex justify-between">
-                        <span class="font-medium">{{ $exercise->exercise_name }}</span>
-                        <span class="text-sm">
-                            {{ $exercise->sets }} x {{ $exercise->reps }}
-                        </span>
-                    </li>
-                @endforeach
-            </ul>
+            <div class="space-y-2 max-h-[70vh] overflow-y-auto">
+                @forelse ($selectedRoutine->routineExercises as $index => $exercise)
+                    <div
+                        class="flex items-center gap-3 p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        {{-- Número --}}
+                        <div
+                            class="shrink-0 w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold text-sm">
+                            {{ $index + 1 }}
+                        </div>
+
+                        {{-- Contenido --}}
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-medium text-gray-900 dark:text-gray-100 truncate">
+                                {{ $exercise->exercise_name }}
+                            </h4>
+                            @if ($exercise->notes)
+                                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                                    {{ $exercise->notes }}
+                                </p>
+                            @endif
+                        </div>
+
+                        {{-- Info rápida --}}
+                        <div class="shrink-0 text-right">
+                            <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                @if ($exercise->sets && $exercise->reps)
+                                    {{ $exercise->sets }}x{{ $exercise->reps }}
+                                @elseif($exercise->duration_seconds)
+                                    {{ $exercise->duration_seconds }}s
+                                @else
+                                    -
+                                @endif
+                            </div>
+                            @if ($exercise->rest_seconds)
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ __('Rest') }}: {{ $exercise->rest_seconds }}s
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <p class="text-gray-500 dark:text-gray-400">
+                            {{ __('No exercises in this routine') }}
+                        </p>
+                    </div>
+                @endforelse
+            </div>
         @endif
 
         <x-slot:actions>
-            <x-button label="{{ __('Close') }}" class="btn-secondary"
-                wire:click="$set('showExercisesModal', false)" />
+            <x-button label="{{ __('Close') }}" class="btn-ghost" @click="$wire.closeExercisesModal()" />
+            @if ($selectedRoutine)
+                @php
+                    $isAssigned = \App\Models\UserRoutine::where('user_id', auth()->id())
+                        ->where('routine_id', $selectedRoutine->id)
+                        ->where('status', 'assigned')
+                        ->exists();
+                @endphp
+
+                @if ($isAssigned)
+                    <x-button label="{{ __('Already Assigned') }}" icon="o-check-circle" class="btn-success"
+                        disabled />
+                @else
+                    <x-button label="{{ __('Assign To Me') }}" icon="o-check" class="btn-primary"
+                        wire:click="assignRoutineFromModal({{ $selectedRoutine->id }})"
+                        spinner="assignRoutineFromModal({{ $selectedRoutine->id }})" />
+                @endif
+            @endif
         </x-slot:actions>
     </x-modal>
-
 </div>

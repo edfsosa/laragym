@@ -120,4 +120,16 @@ class Routine extends Model
             ? substr($this->description, 0, 100) . '...'
             : $this->description;
     }
+
+    public function getDurationFormattedAttribute()
+    {
+        $hours = floor($this->duration_minutes / 60);
+        $minutes = $this->duration_minutes % 60;
+
+        if ($hours > 0) {
+            return "{$hours}h " . ($minutes > 0 ? "{$minutes}m" : "");
+        }
+
+        return "{$minutes}m";
+    }
 }
