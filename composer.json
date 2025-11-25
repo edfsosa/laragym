@@ -16,6 +16,7 @@
         "livewire/livewire": "^3.6",
         "livewire/volt": "^1.7",
         "robsontenorio/mary": "^2.4",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^6.21",
         "spatie/laravel-settings": "^3.5",
         "zrkb/paraguay-regions": "^7.0"

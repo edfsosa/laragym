@@ -119,4 +119,26 @@ class UserMembership extends Model
 
         return $daysUntilEnd >= 0 && $daysUntilEnd <= 7;
     }
+
+    public function getDurationAttribute()
+    {
+        if (!$this->start_at || !$this->end_at) {
+            return null;
+        }
+
+        $interval = $this->start_at->diff($this->end_at);
+
+        $parts = [];
+        if ($interval->y > 0) {
+            $parts[] = $interval->y . ' ' . __('year(s)');
+        }
+        if ($interval->m > 0) {
+            $parts[] = $interval->m . ' ' . __('month(s)');
+        }
+        if ($interval->d > 0) {
+            $parts[] = $interval->d . ' ' . __('day(s)');
+        }
+
+        return implode(', ', $parts);
+    }
 }
